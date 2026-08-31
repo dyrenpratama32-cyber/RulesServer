@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DYREN & DZOE - Cyber Neural AI & Rules Assistant</title>
+    <title>DYREN & DZOE - GHIRP Cyber Neural AI</title>
     <style>
         :root {
             --bg-color: #030712;
-            --panel-bg: rgba(15, 23, 42, 0.75);
+            --panel-bg: rgba(15, 23, 42, 0.85);
             --border-glow: rgba(0, 243, 255, 0.4);
             --neon-cyan: #00f3ff;
             --neon-purple: #bd00ff;
-            --neon-green: #00ff66;
+            --neon-red: #ff0055;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
         }
@@ -26,8 +26,8 @@
             font-family: 'Courier New', Courier, monospace;
             background-color: var(--bg-color);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(189, 0, 255, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.1) 0%, transparent 40%);
+                radial-gradient(circle at 10% 20%, rgba(189, 0, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.15) 0%, transparent 40%);
             color: var(--text-main);
             height: 100vh;
             display: flex;
@@ -36,6 +36,71 @@
             overflow: hidden;
         }
 
+        /* Cinematic Intro Overlay */
+        #cinematicIntro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #030712;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            animation: fadeOutIntro 1s ease 4.5s forwards;
+            pointer-events: none;
+        }
+
+        .cinematic-title {
+            font-size: clamp(20px, 4vw, 32px);
+            font-weight: bold;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 15px var(--neon-cyan), 0 0 30px var(--neon-purple);
+            letter-spacing: 3px;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: textIn 1.5s ease 0.5s forwards, pulseGlow 2s infinite alternate 2s;
+        }
+
+        .cinematic-subtitle {
+            font-size: clamp(12px, 2vw, 16px);
+            color: var(--text-muted);
+            margin-top: 15px;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: textIn 1.5s ease 1.8s forwards;
+        }
+
+        .cinematic-line {
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            margin-top: 20px;
+            animation: expandLine 1.5s ease 2.5s forwards;
+        }
+
+        @keyframes textIn {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes expandLine {
+            to { width: 250px; }
+        }
+
+        @keyframes fadeOutIntro {
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        @keyframes pulseGlow {
+            from { text-shadow: 0 0 10px var(--neon-cyan); }
+            to { text-shadow: 0 0 25px var(--neon-cyan), 0 0 40px var(--neon-purple); }
+        }
+
+        /* Main Cyber Container */
         .cyber-container {
             width: 100%;
             max-width: 500px;
@@ -50,13 +115,19 @@
             flex-direction: column;
             overflow: hidden;
             position: relative;
+            opacity: 0;
+            animation: fadeInMain 1s ease 4.8s forwards;
         }
 
-        /* Header Cyber */
+        @keyframes fadeInMain {
+            to { opacity: 1; }
+        }
+
+        /* Header Cyber dengan Animasi Katana Bot */
         .cyber-header {
             background: linear-gradient(90deg, rgba(0,243,255,0.1), rgba(189,0,255,0.1));
             border-bottom: 1px solid var(--border-glow);
-            padding: 15px;
+            padding: 12px 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -68,9 +139,16 @@
             gap: 12px;
         }
 
+        /* Bot Avatar dengan Efek Animasi Katana Glow */
+        .bot-avatar-container {
+            position: relative;
+            width: 46px;
+            height: 46px;
+        }
+
         .bot-avatar {
-            width: 42px;
-            height: 42px;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
             background: #1e293b;
             border: 2px solid var(--neon-cyan);
@@ -81,7 +159,9 @@
             font-size: 14px;
             color: var(--neon-cyan);
             box-shadow: 0 0 10px var(--neon-cyan);
-            animation: pulse-avatar 2s infinite alternate;
+            animation: botPulse 2s infinite alternate;
+            position: relative;
+            z-index: 2;
         }
 
         .bot-avatar.dzoe {
@@ -90,13 +170,38 @@
             box-shadow: 0 0 10px var(--neon-purple);
         }
 
-        @keyframes pulse-avatar {
-            0% { transform: scale(1); box-shadow: 0 0 5px currentColor; }
-            100% { transform: scale(1.05); box-shadow: 0 0 15px currentColor; }
+        /* Elemen Animasi Katana Membelah / Bersinar */
+        .katana-blade {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            width: 28px;
+            height: 4px;
+            background: linear-gradient(90deg, #fff, var(--neon-cyan));
+            border-radius: 2px;
+            transform: rotate(-45deg);
+            box-shadow: 0 0 8px var(--neon-cyan);
+            animation: katanaSwing 3s infinite ease-in-out;
+            z-index: 3;
+        }
+
+        .bot-avatar.dzoe ~ .katana-blade {
+            background: linear-gradient(90deg, #fff, var(--neon-red));
+            box-shadow: 0 0 8px var(--neon-red);
+        }
+
+        @keyframes katanaSwing {
+            0%, 100% { transform: rotate(-45deg) translate(0, 0); }
+            50% { transform: rotate(-25deg) translate(4px, -4px) scale(1.1); filter: brightness(1.5); }
+        }
+
+        @keyframes botPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.03); }
         }
 
         .bot-info h1 {
-            font-size: 15px;
+            font-size: 14px;
             letter-spacing: 1px;
             color: var(--text-main);
         }
@@ -288,16 +393,26 @@
 </head>
 <body>
 
+    <!-- Cinematic Intro GHIRP Server -->
+    <div id="cinematicIntro">
+        <div class="cinematic-title">SELAMAT DATANG DI SERVER GHIRP</div>
+        <div class="cinematic-line"></div>
+        <div class="cinematic-subtitle">INITIALIZING NEURAL LINK: DYREN & DZOE // KATANA PROTOCOL</div>
+    </div>
+
     <div class="cyber-container">
         <!-- Header -->
         <div class="cyber-header">
             <div class="bot-profiles">
-                <div class="bot-avatar" id="activeAvatar">DY</div>
+                <div class="bot-avatar-container">
+                    <div class="bot-avatar" id="activeAvatar">DY</div>
+                    <div class="katana-blade" id="katanaBlade"></div>
+                </div>
                 <div class="bot-info">
                     <h1 id="activeBotName">DYREN & DZOE</h1>
                     <div class="bot-status">
                         <span class="status-dot"></span>
-                        <span id="statusText">Nexotis Neural Online</span>
+                        <span id="statusText">GHIRP Neural Core Online</span>
                     </div>
                 </div>
             </div>
@@ -315,7 +430,7 @@
         <div class="chat-messages" id="chatMessages">
             <div class="message ai-dyren">
                 <span class="sender-tag">DYREN [CORE AI]</span>
-                Sistem database Nexotis Roleplay aktif. Halo! Aku DYREN bersama DZOE siap membantumu seputar obrolan harian maupun pengecekan Rules Ramboing kota. Ada yang ingin ditanyakan?
+                Selamat datang di server **GHIRP**! Sistem database Roleplay aktif bersama DZOE dengan protokol Katana siap melindungimu. Ada yang ingin ditanyakan seputar rules kota?
             </div>
         </div>
 
@@ -330,7 +445,7 @@
 
         <!-- Input Area -->
         <div class="cyber-input-area">
-            <input type="text" id="userInput" placeholder="Tanya soal kabar atau rules kota..." onkeypress="handleKeyPress(event)">
+            <input type="text" id="userInput" placeholder="Tanya soal kabar atau rules GHIRP..." onkeypress="handleKeyPress(event)">
             <button class="cyber-btn" onclick="sendMessage()">KIRIM</button>
         </div>
     </div>
@@ -348,7 +463,6 @@
             tagSpan.textContent = senderName;
             
             messageDiv.appendChild(tagSpan);
-            // Mendukung baris baru / newline teks
             const textFormatted = text.replace(/\n/g, '<br>');
             const contentSpan = document.createElement('div');
             contentSpan.innerHTML = textFormatted;
@@ -368,48 +482,52 @@
             input = input.toLowerCase();
             turnCounter++;
 
-            // Bergantian antara DYREN dan DZOE
             let isDzoe = turnCounter % 2 === 0;
             let botKey = isDzoe ? 'ai-dzoe' : 'ai-dyren';
             let botName = isDzoe ? 'DZOE [SUB-AI]' : 'DYREN [CORE AI]';
 
             const avatarEl = document.getElementById('activeAvatar');
             const nameEl = document.getElementById('activeBotName');
+            const katanaEl = document.getElementById('katanaBlade');
+
             if (isDzoe) {
                 avatarEl.className = 'bot-avatar dzoe';
                 avatarEl.textContent = 'DZ';
-                nameEl.textContent = 'DZOE (Active)';
+                nameEl.textContent = 'DZOE (Katana Ready)';
+                katanaEl.style.background = 'linear-gradient(90deg, #fff, #ff0055)';
+                katanaEl.style.boxShadow = '0 0 8px #ff0055';
             } else {
                 avatarEl.className = 'bot-avatar';
                 avatarEl.textContent = 'DY';
-                nameEl.textContent = 'DYREN (Active)';
+                nameEl.textContent = 'DYREN (Katana Ready)';
+                katanaEl.style.background = 'linear-gradient(90deg, #fff, var(--neon-cyan))';
+                katanaEl.style.boxShadow = '0 0 8px var(--neon-cyan)';
             }
 
             let responseText = "";
 
-            // Database Rules Ramboing & Obrolan Harian
             if (input.includes('hasil kerja') || input.includes('tas') || input.includes('minyak') || input.includes('kayu') || input.includes('tambang') || input.includes('emas')) {
-                responseText = "📦 **Batas Maksimal Hasil Kerja (Nexotis RP):**\n• Tanpa Tas: Max 200\n• Menggunakan Tas: Max 250\n(Berlaku untuk Minyak, Kayu, Tambang, Jahit, dll).";
+                responseText = "📦 **Batas Maksimal Hasil Kerja (GHIRP Server):**\n• Tanpa Tas: Max 200\n• Menggunakan Tas: Max 250\n(Berlaku untuk Minyak, Kayu, Tambang, Jahit, dll).";
             } else if (input.includes('peralatan') || input.includes('alat') || input.includes('hp') || input.includes('skate') || input.includes('toolkit') || input.includes('makanan') || input.includes('bandage')) {
                 responseText = "🛠️ **Batas Maksimal Peralatan:**\n• HP, Skate, Pilox, Toolkit, Jerigen: Max 5\n• Paket Makanan: Max 10\n• Makanan & Minuman: Max 20\n• Bandage: Max 10";
             } else if (input.includes('uang') || input.includes('koper') || input.includes('hijau') || input.includes('dolar')) {
                 responseText = "💵 **Batas Maksimal Membawa Uang Hijau:**\n• Tanpa Koper: Max $100.000 di kantong.\n• Menggunakan Aksesoris Koper: Max $1.000.000.";
             } else if (input.includes('sanksi') || input.includes('hukuman') || input.includes('jail') || input.includes('warning') || input.includes('pelanggaran')) {
-                responseText = "⚠️ **Sanksi Pelanggaran Rules Ramboing:**\n• Jail 60 Menit\n• +2 Warning\n(Tidak ada toleransi, pastikan cek barang bawaanmu sebelum RP!).";
-            } else if (input.includes('rules') || input.includes('ramboing')) {
-                responseText = "⚖️ Rules Ramboing Nexotis RP mencakup batas hasil kerja (max 200/250), batas peralatan, batas uang hijau ($100k/$1M), serta sanksi tegas Jail 60 menit & +2 Warning jika melanggar.";
+                responseText = "⚠️ **Sanksi Pelanggaran Rules GHIRP:**\n• Jail 60 Menit\n• +2 Warning\n(Tidak ada toleransi, patuhi protokol kota!).";
+            } else if (input.includes('rules') || input.includes('ghirp')) {
+                responseText = "⚖️ Rules GHIRP mencakup batas hasil kerja (max 200/250), batas peralatan, batas uang hijau ($100k/$1M), serta sanksi tegas Jail 60 menit & +2 Warning jika melanggar.";
             } else if (input.includes('halo') || input.includes('hai') || input.includes('pagi') || input.includes('siang') || input.includes('sore') || input.includes('malam')) {
-                responseText = isDzoe ? "Hai juga! Senang sistemku terhubung denganmu. Ada yang ingin ditanyakan seputar rules kota hari ini?" : "Halo! Koneksi stabil. Butuh info rules Ramboing atau sekadar ngobrol santai?";
+                responseText = isDzoe ? "Hai juga! Pedang Katana siap siaga. Ada yang ingin ditanyakan seputar rules GHIRP hari ini?" : "Halo! Sistem neural stabil. Butuh info rules atau sekadar ngobrol santai di kota?";
             } else if (input.includes('sehat') || input.includes('baik') || input.includes('alhamdulillah')) {
-                responseText = "Syukur jika sistem biologismu berjalan optimal dan sehat! Pertahankan kondisinya ya.";
+                responseText = "Syukur jika kondisi biologismu prima! Pertahankan energi tempurmu di GHIRP.";
             } else if (input.includes('sakit') || input.includes('capek') || input.includes('lelah')) {
-                responseText = "Peringatan energi rendah terdeteksi! Segera istirahat yang cukup agar performamu pulih kembali.";
+                responseText = "Peringatan sistem: Segera istirahat yang cukup agar performa Roleplay-mu tetap maksimal.";
             } else if (input.includes('terima kasih') || input.includes('makasih')) {
-                responseText = "Sama-sama! Selalu siap membantu operasionalmu di Nexotis Roleplay.";
+                responseText = "Sama-sama! Selalu siap mendampingi operasionalmu di server GHIRP.";
             } else if (input.includes('dadah') || input.includes('bye')) {
-                responseText = "Menutup sesi interaksi. Hati-hati di in-game, patuhi rules ramboing ya!";
+                responseText = "Menutup sesi interaksi. Tetap waspada dan patuhi rules GHIRP!";
             } else {
-                responseText = "Analisis data diterima: \"" + input + "\". Kamu bisa tanyakan batas hasil kerja, peralatan, uang hijau, atau sanksi rules ramboing kota!";
+                responseText = "Analisis data diterima: \"" + input + "\". Silakan gunakan tombol pintasan rules atau tanya seputar kota GHIRP!";
             }
 
             return { class: botKey, name: botName, text: responseText };
@@ -420,7 +538,7 @@
             if (queryType === 'hasil kerja') userText = "Berapa batas maksimal hasil kerja?";
             else if (queryType === 'peralatan') userText = "Apa batas maksimal peralatan?";
             else if (queryType === 'uang') userText = "Berapa batas maksimal bawa uang hijau?";
-            else if (queryType === 'sanksi') userText = "Apa sanksi pelanggaran rules ramboing?";
+            else if (queryType === 'sanksi') userText = "Apa sanksi pelanggaran rules?";
 
             appendMessage('user', 'YOU [USER]', userText);
             showTyping(true);
