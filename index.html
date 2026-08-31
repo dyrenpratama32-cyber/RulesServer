@@ -3,131 +3,370 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Assistant - Ngobrol Santai</title>
+    <title>DYREN & DZOE - Cyber Neural AI</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+        :root {
+            --bg-color: #030712;
+            --panel-bg: rgba(15, 23, 42, 0.75);
+            --border-glow: rgba(0, 243, 255, 0.4);
+            --neon-cyan: #00f3ff;
+            --neon-purple: #bd00ff;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(189, 0, 255, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.1) 0%, transparent 40%);
+            color: var(--text-main);
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            overflow: hidden;
         }
-        .chat-container {
+
+        .cyber-container {
             width: 100%;
-            max-width: 400px;
-            height: 600px;
-            background: #ffffff;
+            max-width: 480px;
+            height: 90vh;
+            max-height: 750px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glow);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.15), inset 0 0 15px rgba(0, 243, 255, 0.05);
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            position: relative;
         }
-        .chat-header {
-            background-color: #0084ff;
-            color: white;
+
+        /* Header Cyber */
+        .cyber-header {
+            background: linear-gradient(90deg, rgba(0,243,255,0.1), rgba(189,0,255,0.1));
+            border-bottom: 1px solid var(--border-glow);
             padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
+
+        .bot-profiles {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .bot-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #1e293b;
+            border: 2px solid var(--neon-cyan);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan);
+            animation: pulse-avatar 2s infinite alternate;
+            position: relative;
+        }
+
+        .bot-avatar.dzoe {
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+            box-shadow: 0 0 10px var(--neon-purple);
+        }
+
+        @keyframes pulse-avatar {
+            0% { transform: scale(1); box-shadow: 0 0 5px currentColor; }
+            100% { transform: scale(1.05); box-shadow: 0 0 15px currentColor; }
+        }
+
+        .bot-info h1 {
+            font-size: 15px;
+            letter-spacing: 1px;
+            color: var(--text-main);
+        }
+
+        .bot-status {
+            font-size: 11px;
+            color: var(--neon-cyan);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background-color: var(--neon-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--neon-cyan);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Area Pesan Chat */
         .chat-messages {
             flex: 1;
-            padding: 15px;
+            padding: 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
+            gap: 14px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            max-width: 82%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.ai-dyren {
+            background: rgba(0, 243, 255, 0.08);
+            border-left: 3px solid var(--neon-cyan);
+            color: var(--text-main);
+            align-self: flex-start;
+        }
+
+        .message.ai-dzoe {
+            background: rgba(189, 0, 255, 0.08);
+            border-left: 3px solid var(--neon-purple);
+            color: var(--text-main);
+            align-self: flex-start;
+        }
+
+        .message.user {
+            background: rgba(255, 255, 255, 0.05);
+            border-right: 3px solid var(--text-muted);
+            color: var(--text-main);
+            align-self: flex-end;
+            text-align: right;
+        }
+
+        .sender-tag {
+            font-size: 10px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            display: block;
+            letter-spacing: 0.5px;
+        }
+
+        .ai-dyren .sender-tag { color: var(--neon-cyan); }
+        .ai-dzoe .sender-tag { color: var(--neon-purple); }
+
+        /* Area Input */
+        .cyber-input-area {
+            padding: 15px;
+            background: rgba(3, 7, 18, 0.9);
+            border-top: 1px solid var(--border-glow);
+            display: flex;
             gap: 10px;
         }
-        .message {
-            max-width: 80%;
-            padding: 10px 14px;
-            border-radius: 15px;
-            font-size: 14px;
-            line-height: 1.4;
-        }
-        .message.ai {
-            background-color: #e4e6eb;
-            color: #050505;
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-        }
-        .message.user {
-            background-color: #0084ff;
-            color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-        }
-        .chat-input-area {
-            display: flex;
-            padding: 10px;
-            background: #ffffff;
-            border-top: 1px solid #ddd;
-        }
-        .chat-input-area input {
+
+        .cyber-input-area input {
             flex: 1;
-            padding: 10px 14px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border-glow);
+            padding: 12px 16px;
+            border-radius: 6px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 13px;
             outline: none;
-            font-size: 14px;
+            transition: all 0.3s;
         }
-        .chat-input-area button {
-            background-color: #0084ff;
-            color: white;
+
+        .cyber-input-area input:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+        }
+
+        .cyber-btn {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            color: #030712;
             border: none;
-            padding: 0 16px;
-            margin-left: 8px;
-            border-radius: 20px;
-            cursor: pointer;
+            padding: 0 20px;
+            border-radius: 6px;
+            font-family: inherit;
             font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
         }
-        .chat-input-area button:hover {
-            background-color: #006dd9;
+
+        .cyber-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Indikator Sedang Mengetik */
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 14px;
+            background: rgba(0, 243, 255, 0.05);
+            border-left: 3px solid var(--neon-cyan);
+            border-radius: 8px;
+            width: fit-content;
+            align-self: flex-start;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--neon-cyan);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="chat-container">
-        <div class="chat-header">Asisten AI Harian</div>
-        <div class="chat-messages" id="chatMessages">
-            <div class="message ai">Halo! Aku asisten setiamu. Ada yang bisa aku bantu hari ini, atau mau ngobrol santai?</div>
+    <div class="cyber-container">
+        <!-- Header -->
+        <div class="cyber-header">
+            <div class="bot-profiles">
+                <div class="bot-avatar" id="activeAvatar">DY</div>
+                <div class="bot-info">
+                    <h1 id="activeBotName">DYREN & DZOE</h1>
+                    <div class="bot-status">
+                        <span class="status-dot"></span>
+                        <span id="statusText">Neural Core Online</span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="chat-input-area">
-            <input type="text" id="userInput" placeholder="Ketik pesan di sini..." onkeypress="handleKeyPress(event)">
-            <button onclick="sendMessage()">Kirim</button>
+
+        <!-- Chat Log -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-dyren">
+                <span class="sender-tag">DYREN [CORE AI]</span>
+                Inisialisasi sistem neural berhasil. Halo! Aku DYREN bersama rekanku DZOE siap menemanimu mengobrol hari ini. Ada yang ingin dibahas?
+            </div>
+        </div>
+
+        <!-- Indikator Ketik -->
+        <div class="chat-messages" style="padding-top: 0; padding-bottom: 0;">
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="cyber-input-area">
+            <input type="text" id="userInput" placeholder="Ketik pesan atau sapaan..." onkeypress="handleKeyPress(event)">
+            <button class="cyber-btn" onclick="sendMessage()">KIRIM</button>
         </div>
     </div>
 
     <script>
-        function appendMessage(sender, text) {
+        let turnCounter = 0;
+
+        function appendMessage(senderClass, senderName, text) {
             const chatMessages = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message', sender);
-            messageDiv.textContent = text;
+            messageDiv.classList.add('message', senderClass);
+            
+            const tagSpan = document.createElement('span');
+            tagSpan.classList.add('sender-tag');
+            tagSpan.textContent = senderName;
+            
+            messageDiv.appendChild(tagSpan);
+            messageDiv.append(text);
+            
             chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTyping(show) {
+            document.getElementById('typingIndicator').style.display = show ? 'flex' : 'none';
+            const chatMessages = document.getElementById('chatMessages');
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
         function getAIResponse(input) {
             input = input.toLowerCase();
+            turnCounter++;
+
+            // Bergantian antara DYREN dan DZOE
+            let isDzoe = turnCounter % 2 === 0;
+            let botKey = isDzoe ? 'ai-dzoe' : 'ai-dyren';
+            let botName = isDzoe ? 'DZOE [SUB-AI]' : 'DYREN [CORE AI]';
+
+            // Ubah avatar aktif di header secara dinamis
+            const avatarEl = document.getElementById('activeAvatar');
+            const nameEl = document.getElementById('activeBotName');
+            if (isDzoe) {
+                avatarEl.className = 'bot-avatar dzoe';
+                avatarEl.textContent = 'DZ';
+                nameEl.textContent = 'DZOE (Active)';
+            } else {
+                avatarEl.className = 'bot-avatar';
+                avatarEl.textContent = 'DY';
+                nameEl.textContent = 'DYREN (Active)';
+            }
+
+            let responseText = "";
 
             if (input.includes('halo') || input.includes('hai') || input.includes('pagi') || input.includes('siang') || input.includes('sore') || input.includes('malam')) {
-                return "Halo juga! Senang bisa ngobrol sama kamu. Gimana kabar kamu hari ini?";
-            } else if (input.includes('sehat') || input.includes('baik') || input.includes('alhamdulillah') || input.includes('luar biasa')) {
-                return "Syukurlah kalau kamu sehat dan baik-baik saja! Jaga kesehatan terus ya.";
-            } else if (input.includes('kurang sehat') || input.includes('sakit') || input.includes('lelah') || input.includes('capek')) {
-                return "Wah, lekas sembuh atau istirahat yang cukup ya! Jangan diporsir, kesehatanmu yang paling utama.";
+                responseText = isDzoe ? "Hai juga! Senang sistemku terhubung denganmu. Gimana kabar kamu hari ini?" : "Halo! Koneksi stabil. Ada yang bisa dibantu atau mau ngobrol santai?";
+            } else if (input.includes('sehat') || input.includes('baik') || input.includes('alhamdulillah')) {
+                responseText = "Syukur jika sistem biologismu berjalan optimal dan sehat! Pertahankan kondisinya ya.";
+            } else if (input.includes('sakit') || input.includes('capek') || input.includes('lelah')) {
+                responseText = "Peringatan energi rendah terdeteksi! Segera istirahat yang cukup agar performamu pulih kembali.";
             } else if (input.includes('terima kasih') || input.includes('makasih')) {
-                return "Sama-sama! Kalau butuh teman ngobrol atau bantuan lagi, panggil aku ya.";
+                responseText = "Sama-sama! Selalu senang bisa berinteraksi denganmu di jaringan ini.";
             } else if (input.includes('dadah') || input.includes('bye')) {
-                return "Dadah! Sampai jumpa lagi, semoga harimu menyenangkan!";
+                responseText = "Menutup sesi interaksi. Sampai jumpa di jaringan selanjutnya!";
             } else {
-                return "Wah, menarik banget! Ceritakan lebih banyak dong, atau tanyakan hal lain kalau ada yang ingin dibahas.";
+                responseText = "Analisis data diterima: \"" + input + "\". Topik yang menarik! Ceritakan lebih banyak detailnya.";
             }
+
+            return { class: botKey, name: botName, text: responseText };
         }
 
         function sendMessage() {
@@ -135,13 +374,16 @@
             const text = inputField.value.trim();
             if (text === "") return;
 
-            appendMessage('user', text);
+            appendMessage('user', 'YOU [USER]', text);
             inputField.value = "";
 
+            showTyping(true);
+
             setTimeout(() => {
-                const response = getAIResponse(text);
-                appendMessage('ai', response);
-            }, 500);
+                showTyping(false);
+                const aiReply = getAIResponse(text);
+                appendMessage(aiReply.class, aiReply.name, aiReply.text);
+            }, 800);
         }
 
         function handleKeyPress(event) {
@@ -150,6 +392,5 @@
             }
         }
     </script>
-
 </body>
 </html>
