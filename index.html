@@ -96,7 +96,7 @@
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
         }
 
-        /* --- STAGE ROBOT INTERAKSI (DI PERBESAR & DUAL ROBOT) --- */
+        /* --- STAGE ROBOT INTERAKSI --- */
         .robot-stage {
             background: linear-gradient(180deg, #0b0f19 0%, #111827 100%);
             border-bottom: 1px solid rgba(212, 175, 55, 0.2);
@@ -137,6 +137,7 @@
             align-items: center;
             gap: 10px;
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            transition: transform 0.2s;
         }
 
         .robot-antenna-lg {
@@ -169,6 +170,11 @@
             animation: blink 4s infinite;
         }
 
+        /* Robot Talking Animation */
+        .speaking .robot-head-lg {
+            transform: scale(1.1);
+        }
+
         /* Robot 2 (Cyan theme) */
         .robot-avatar-lg.cyan .robot-head-lg {
             border-color: #38bdf8;
@@ -178,7 +184,7 @@
         .robot-avatar-lg.cyan .robot-antenna-ball-lg { background: #0ea5e9; box-shadow: 0 0 12px #0ea5e9; }
         .robot-avatar-lg.cyan .robot-eye-lg { background-color: #0ea5e9; box-shadow: 0 0 10px #0ea5e9; }
 
-        /* Dialog Dialog Antar Robot */
+        /* Dialog Box */
         .robot-dialog-box {
             background: rgba(30, 41, 59, 0.9);
             border: 1px solid #d4af37;
@@ -382,7 +388,7 @@
     <!-- STAGE ROBOT INTERAKSI (CINEMATIC CHAT ROBOT TO ROBOT) -->
     <div class="robot-stage">
         <!-- Robot 1 (Alpha) -->
-        <div class="robot-container">
+        <div class="robot-container" id="bot01Container">
             <div class="robot-avatar-lg">
                 <div class="robot-antenna-ball-lg"></div>
                 <div class="robot-antenna-lg"></div>
@@ -396,11 +402,11 @@
 
         <!-- Dynamic Dialog Box -->
         <div class="robot-dialog-box" id="robotTalk">
-            "Bro, bagaimana aturan ramboing di kota/server ini?"
+            "Bro, bagaimana aturan ramboing di kota atau server ini?"
         </div>
 
         <!-- Robot 2 (Beta) -->
-        <div class="robot-container">
+        <div class="robot-container" id="bot02Container">
             <div class="robot-avatar-lg cyan">
                 <div class="robot-antenna-ball-lg"></div>
                 <div class="robot-antenna-lg"></div>
@@ -437,37 +443,86 @@
     </div>
 
     <script>
-        // FUNGSI ENTER SYSTEM (CINEMATIC INTRO)
+        let isAudioAllowed = false;
+
+        // FUNGSI SUARA ROBOT (TEXT-TO-SPEECH BAHASA INDONESIA)
+        function speakText(text, isRobotOne) {
+            if (!isAudioAllowed || !('speechSynthesis' in window)) return;
+
+            window.speechSynthesis.cancel(); // Hentikan suara sebelumnya
+
+            // Clean HTML tag
+            const cleanText = text.replace(/<[^>]*>?/gm, '');
+
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'id-ID';
+
+            // Pembeda Nada Suara Bot 1 dan Bot 2
+            if (isRobotOne) {
+                utterance.pitch = 0.8; // Nada lebih berat
+                utterance.rate = 1.0;
+            } else {
+                utterance.pitch = 1.3; // Nada lebih tinggi / futuristik
+                utterance.rate = 1.05;
+            }
+
+            // Animasi Efek Bicara
+            const talkBot = isRobotOne ? document.getElementById('bot01Container') : document.getElementById('bot02Container');
+            talkBot.classList.add('speaking');
+
+            utterance.onend = () => {
+                talkBot.classList.remove('speaking');
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // FUNGSI ENTER SYSTEM
         function enterSystem() {
+            isAudioAllowed = true;
             const intro = document.getElementById('cinematicIntro');
             intro.style.opacity = '0';
             setTimeout(() => {
                 intro.style.visibility = 'hidden';
+                triggerRobotDialog(0); // Mulai dialog pertama saat masuk
             }, 1000);
         }
 
-        // ANIMASI INTERAKSI CHAT ANTAR ROBOT
+        // DATA DIALOG DAN SUARA ROBOT
         const robotConversations = [
-            `<b>DYREN BOT 01:</b> "Bro, bagaimana aturan ramboing di kota/server ini?"`,
-            `<b>DYREN BOT 02:</b> "Hasil kerja tanpa tas max 200, kalau pakai tas bisa bawa sampai 250."`,
-            `<b>DYREN BOT 01:</b> "Kalau bawa uang di kantong berapa batas maksimalnya?"`,
-            `<b>DYREN BOT 02:</b> "Tanpa koper max $100.000, kalau pakai koper bisa $1.000.000!"`,
-            `<b>DYREN BOT 01:</b> "Sanksinya kalau melanggar apa?"`,
-            `<b>DYREN BOT 02:</b> "Bisa kena Jail 60 menit + 2 Warning tanpa toleransi!"`,
-            `<b>DYREN BOT 01:</b> "Siap, wajib patuhi rules demi keadilan roleplay!"`
+            { bot: 1, text: "Bro, bagaimana aturan ramboing di kota atau server ini?" },
+            { bot: 2, text: "Hasil kerja tanpa tas maksimal 200, kalau pakai tas bisa membawa sampai 250." },
+            { bot: 1, text: "Kalau membawa uang di kantong berapa batas maksimalnya?" },
+            { bot: 2, text: "Tanpa koper maksimal 100 ribu, kalau pakai koper bisa 1 juta rupiah!" },
+            { bot: 1, text: "Sanksinya kalau melanggar apa bro?" },
+            { bot: 2, text: "Bisa kena Jail 60 menit dan 2 Warning tanpa toleransi!" },
+            { bot: 1, text: "Siap, wajib mematuhi rules demi keadilan roleplay!" }
         ];
 
         let talkIndex = 0;
-        setInterval(() => {
-            talkIndex = (talkIndex + 1) % robotConversations.length;
+
+        function triggerRobotDialog(index) {
+            const currentTalk = robotConversations[index];
             const talkBox = document.getElementById('robotTalk');
+            const botName = currentTalk.bot === 1 ? "DYREN BOT 01" : "DYREN BOT 02";
+            
             talkBox.style.animation = 'none';
             talkBox.offsetHeight; // trigger reflow
             talkBox.style.animation = 'dialogFade 0.5s ease-in-out';
-            talkBox.innerHTML = robotConversations[talkIndex];
-        }, 4000);
+            talkBox.innerHTML = `<b>${botName}:</b> "${currentTalk.text}"`;
 
-        // DATABASE RULES SERVER GHRP / DYREN STUDIO
+            // Bunyikan Suara Bahasa Indonesia
+            speakText(currentTalk.text, currentTalk.bot === 1);
+        }
+
+        // PERGANTIAN DIALOG ANTIMACET
+        setInterval(() => {
+            if (!isAudioAllowed) return;
+            talkIndex = (talkIndex + 1) % robotConversations.length;
+            triggerRobotDialog(talkIndex);
+        }, 5000);
+
+        // DATABASE RULES SERVER
         const ramboingRulesText = `Demi menjaga keseimbangan, keadilan, dan kualitas Roleplay, berikut adalah pembaruan <b>Rules Ramboing</b> yang WAJIB dipatuhi oleh seluruh pemain. ⚖️✨<br><br>
 📦 <b>Batas Maksimal Hasil Kerja:</b><br>
 📌 Tanpa Tas: Max 200<br>
