@@ -96,11 +96,11 @@
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
         }
 
-        /* --- STAGE ROBOT INTERAKSI --- */
+        /* --- STAGE INTERAKSI (ROBOT & SAMURAI) --- */
         .robot-stage {
             background: linear-gradient(180deg, #0b0f19 0%, #111827 100%);
             border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 1.5rem;
+            padding: 2rem 1rem;
             display: flex;
             align-items: center;
             justify-content: space-around;
@@ -108,13 +108,15 @@
             overflow: hidden;
         }
 
-        .robot-container {
+        .character-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
+            z-index: 2;
         }
 
+        /* --- ROBOT AVATAR --- */
         .robot-avatar-lg {
             width: 70px;
             height: 70px;
@@ -173,33 +175,138 @@
             transform: scale(1.15);
         }
 
-        .robot-avatar-lg.cyan .robot-head-lg {
-            border-color: #38bdf8;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
-        }
-        .robot-avatar-lg.cyan .robot-antenna-lg { background: #38bdf8; }
-        .robot-avatar-lg.cyan .robot-antenna-ball-lg { background: #0ea5e9; box-shadow: 0 0 12px #0ea5e9; }
-        .robot-avatar-lg.cyan .robot-eye-lg { background-color: #0ea5e9; box-shadow: 0 0 10px #0ea5e9; }
-
-        .robot-dialog-box {
-            background: rgba(30, 41, 59, 0.9);
-            border: 1px solid #d4af37;
-            padding: 0.8rem 1.2rem;
-            border-radius: 12px;
-            max-width: 320px;
-            font-size: 0.85rem;
-            color: #e2e8f0;
-            position: relative;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
-            animation: dialogFade 0.5s ease-in-out;
-        }
-
         .robot-label {
             font-size: 0.75rem;
             font-weight: bold;
             color: #d4af37;
             margin-bottom: 4px;
             display: block;
+        }
+
+        /* --- SAMURAI CINEMATIC AVATAR --- */
+        .samurai-avatar {
+            width: 70px;
+            height: 80px;
+            position: relative;
+            animation: float 3.5s ease-in-out infinite 0.5s;
+        }
+
+        /* Helm & Topeng Samurai (Kabuto & Menpo) */
+        .samurai-helmet {
+            width: 45px;
+            height: 25px;
+            background: #1e1b4b;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            position: absolute;
+            top: 10px;
+            left: 12.5px;
+            border: 2px solid #ef4444;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Tanduk Helm (Kuwagata) */
+        .samurai-horn-left, .samurai-horn-right {
+            width: 14px;
+            height: 4px;
+            background: #f59e0b;
+            position: absolute;
+            top: 6px;
+            box-shadow: 0 0 8px #f59e0b;
+        }
+
+        .samurai-horn-left {
+            left: 10px;
+            transform: rotate(-35deg);
+            border-top-left-radius: 5px;
+        }
+
+        .samurai-horn-right {
+            right: 10px;
+            transform: rotate(35deg);
+            border-top-right-radius: 5px;
+        }
+
+        /* Mata Merah Menyala */
+        .samurai-eyes {
+            position: absolute;
+            top: 26px;
+            left: 18px;
+            display: flex;
+            gap: 12px;
+            z-index: 3;
+        }
+
+        .samurai-eye {
+            width: 7px;
+            height: 3px;
+            background: #ef4444;
+            box-shadow: 0 0 8px #ef4444;
+        }
+
+        /* Topeng Muka (Menpo) */
+        .samurai-mask {
+            width: 35px;
+            height: 20px;
+            background: #0f172a;
+            border: 2px solid #ef4444;
+            position: absolute;
+            top: 28px;
+            left: 17.5px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        /* Pedang Katana & Animasi Sabetan Slash */
+        .samurai-katana {
+            width: 4px;
+            height: 50px;
+            background: linear-gradient(to bottom, #ffffff, #94a3b8);
+            position: absolute;
+            top: 15px;
+            right: 0px;
+            transform-origin: bottom center;
+            transform: rotate(45deg);
+            box-shadow: 0 0 12px #38bdf8;
+            border-radius: 2px;
+            animation: katanaIdle 4s ease-in-out infinite;
+        }
+
+        .speaking .samurai-katana {
+            animation: katanaSlash 0.8s ease-in-out infinite alternate;
+        }
+
+        /* Efek Tebasan Cahaya Katana */
+        .slash-effect {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-right: 4px solid #38bdf8;
+            border-top: 4px solid transparent;
+            border-radius: 50%;
+            top: 0px;
+            right: -20px;
+            opacity: 0;
+            transform: rotate(-45deg);
+            filter: drop-shadow(0 0 10px #38bdf8);
+        }
+
+        .speaking .slash-effect {
+            animation: slashAnim 0.8s ease-in-out infinite alternate;
+        }
+
+        /* --- DIALOG BOX --- */
+        .robot-dialog-box {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid #d4af37;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            max-width: 340px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.6);
+            z-index: 2;
         }
 
         /* --- CONTAINER & CHAT --- */
@@ -329,6 +436,7 @@
             background-color: #0f172a;
         }
 
+        /* --- KEYFRAMES --- */
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-8px); }
@@ -364,6 +472,23 @@
             from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
         }
+
+        /* Keyframes Samurai Katana */
+        @keyframes katanaIdle {
+            0%, 100% { transform: rotate(45deg); }
+            50% { transform: rotate(40deg); }
+        }
+
+        @keyframes katanaSlash {
+            0% { transform: rotate(20deg) scale(1); }
+            100% { transform: rotate(-60deg) scale(1.15); }
+        }
+
+        @keyframes slashAnim {
+            0% { opacity: 0; transform: rotate(-45deg) scale(0.5); }
+            50% { opacity: 1; transform: rotate(15deg) scale(1.2); }
+            100% { opacity: 0; transform: rotate(45deg) scale(1.4); }
+        }
     </style>
 </head>
 <body>
@@ -380,9 +505,10 @@
         <span>Official Server AI Assistant</span>
     </header>
 
-    <!-- STAGE ROBOT INTERAKSI -->
+    <!-- STAGE INTERAKSI (ROBOT BOT 01 vs SAMURAI BOT 02) -->
     <div class="robot-stage">
-        <div class="robot-container" id="bot01Container">
+        <!-- Robot Alpha -->
+        <div class="character-container" id="bot01Container">
             <div class="robot-avatar-lg">
                 <div class="robot-antenna-ball-lg"></div>
                 <div class="robot-antenna-lg"></div>
@@ -394,20 +520,26 @@
             <span class="robot-label">DYREN BOT 01</span>
         </div>
 
+        <!-- Dynamic Dialog Box -->
         <div class="robot-dialog-box" id="robotTalk">
             "Sistem siap digunakan."
         </div>
 
-        <div class="robot-container" id="bot02Container">
-            <div class="robot-avatar-lg cyan">
-                <div class="robot-antenna-ball-lg"></div>
-                <div class="robot-antenna-lg"></div>
-                <div class="robot-head-lg">
-                    <div class="robot-eye-lg"></div>
-                    <div class="robot-eye-lg"></div>
+        <!-- Cyber Samurai (Bot 02) -->
+        <div class="character-container" id="bot02Container">
+            <div class="samurai-avatar">
+                <div class="samurai-horn-left"></div>
+                <div class="samurai-horn-right"></div>
+                <div class="samurai-helmet"></div>
+                <div class="samurai-eyes">
+                    <div class="samurai-eye"></div>
+                    <div class="samurai-eye"></div>
                 </div>
+                <div class="samurai-mask"></div>
+                <div class="samurai-katana"></div>
+                <div class="slash-effect"></div>
             </div>
-            <span class="robot-label" style="color: #38bdf8;">DYREN BOT 02</span>
+            <span class="robot-label" style="color: #ef4444;">CYBER SAMURAI</span>
         </div>
     </div>
 
@@ -448,15 +580,13 @@
             { bot: 1, text: "Siap, wajib mematuhi rules demi keadilan roleplay!" }
         ];
 
-        // FUNGSI UTAMA BICARA DAN PERGANTIAN OTOMATIS
         function triggerRobotDialog(index) {
             if (!isAudioAllowed) return;
 
             const currentTalk = robotConversations[index];
             const talkBox = document.getElementById('robotTalk');
-            const botName = currentTalk.bot === 1 ? "DYREN BOT 01" : "DYREN BOT 02";
+            const botName = currentTalk.bot === 1 ? "DYREN BOT 01" : "CYBER SAMURAI";
             
-            // Perbarui visual teks dialog
             talkBox.style.animation = 'none';
             talkBox.offsetHeight;
             talkBox.style.animation = 'dialogFade 0.5s ease-in-out';
@@ -464,33 +594,29 @@
 
             if (!('speechSynthesis' in window)) return;
 
-            window.speechSynthesis.cancel(); // Bersihkan antrean lama
+            window.speechSynthesis.cancel();
 
             const utterance = new SpeechSynthesisUtterance(currentTalk.text);
             utterance.lang = 'id-ID';
-            utterance.rate = 0.95; // Kecepatan ideal pembacaan Bahasa Indonesia
+            utterance.rate = 0.95;
 
             if (currentTalk.bot === 1) {
-                utterance.pitch = 0.85; // Nada Bot 1
+                utterance.pitch = 0.85; // Suara Robot
             } else {
-                utterance.pitch = 1.25; // Nada Bot 2
+                utterance.pitch = 1.35; // Suara Samurai (Futuristik/Tinggi)
             }
 
             const talkBot = currentTalk.bot === 1 ? document.getElementById('bot01Container') : document.getElementById('bot02Container');
             talkBot.classList.add('speaking');
 
-            // HANYA LANJUT KE DIALOG BERIKUTNYA SETELAH SUARA SELESAI
             utterance.onend = () => {
                 talkBot.classList.remove('speaking');
-                
-                // Jeda 1.5 detik antar dialog agar tidak terlalu cepat
                 setTimeout(() => {
                     talkIndex = (talkIndex + 1) % robotConversations.length;
                     triggerRobotDialog(talkIndex);
                 }, 1500);
             };
 
-            // Penanganan jika terjadi eror suara agar siklus dialog tidak macet
             utterance.onerror = () => {
                 talkBot.classList.remove('speaking');
                 setTimeout(() => {
@@ -508,11 +634,10 @@
             intro.style.opacity = '0';
             setTimeout(() => {
                 intro.style.visibility = 'hidden';
-                triggerRobotDialog(0); // Mulai siklus dialog interaktif
+                triggerRobotDialog(0);
             }, 1000);
         }
 
-        // DATABASE CHATBOT
         const ramboingRulesText = `Demi menjaga keseimbangan, keadilan, dan kualitas Roleplay, berikut adalah pembaruan <b>Rules Ramboing</b> yang WAJIB dipatuhi oleh seluruh pemain. ⚖️✨<br><br>
 📦 <b>Batas Maksimal Hasil Kerja:</b><br>
 📌 Tanpa Tas: Max 200<br>
