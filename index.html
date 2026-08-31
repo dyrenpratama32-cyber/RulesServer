@@ -96,7 +96,26 @@
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
         }
 
-        /* --- STAGE INTERAKSI (ROBOT & SAMURAI) --- */
+        .bgm-control {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+
+        .bgm-control:hover {
+            background: #d4af37;
+            color: #050811;
+        }
+
+        /* --- STAGE INTERAKSI --- */
         .robot-stage {
             background: linear-gradient(180deg, #0b0f19 0%, #111827 100%);
             border-bottom: 1px solid rgba(212, 175, 55, 0.2);
@@ -191,7 +210,6 @@
             animation: float 3.5s ease-in-out infinite 0.5s;
         }
 
-        /* Helm & Topeng Samurai (Kabuto & Menpo) */
         .samurai-helmet {
             width: 45px;
             height: 25px;
@@ -205,7 +223,6 @@
             box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
         }
 
-        /* Tanduk Helm (Kuwagata) */
         .samurai-horn-left, .samurai-horn-right {
             width: 14px;
             height: 4px;
@@ -227,7 +244,6 @@
             border-top-right-radius: 5px;
         }
 
-        /* Mata Merah Menyala */
         .samurai-eyes {
             position: absolute;
             top: 26px;
@@ -244,7 +260,6 @@
             box-shadow: 0 0 8px #ef4444;
         }
 
-        /* Topeng Muka (Menpo) */
         .samurai-mask {
             width: 35px;
             height: 20px;
@@ -257,7 +272,6 @@
             border-bottom-right-radius: 10px;
         }
 
-        /* Pedang Katana & Animasi Sabetan Slash */
         .samurai-katana {
             width: 4px;
             height: 50px;
@@ -276,7 +290,6 @@
             animation: katanaSlash 0.8s ease-in-out infinite alternate;
         }
 
-        /* Efek Tebasan Cahaya Katana */
         .slash-effect {
             position: absolute;
             width: 60px;
@@ -473,7 +486,6 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Keyframes Samurai Katana */
         @keyframes katanaIdle {
             0%, 100% { transform: rotate(45deg); }
             50% { transform: rotate(40deg); }
@@ -502,10 +514,10 @@
 
     <header>
         <h1>DYREN STUDIO</h1>
-        <span>Official Server AI Assistant</span>
+        <button class="bgm-control" id="bgmBtn" onclick="toggleBGM()">🎵 BGM: ON</button>
     </header>
 
-    <!-- STAGE INTERAKSI (ROBOT BOT 01 vs SAMURAI BOT 02) -->
+    <!-- STAGE INTERAKSI -->
     <div class="robot-stage">
         <!-- Robot Alpha -->
         <div class="character-container" id="bot01Container">
@@ -569,7 +581,77 @@
     <script>
         let isAudioAllowed = false;
         let talkIndex = 0;
+        let audioCtx = null;
+        let bgmInterval = null;
+        let isBgmPlaying = false;
 
+        // --- SISTEM PEMBUATAN LAGU JEPANG SAMURAI (Web Audio API) ---
+        function startSamuraiBGM() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            isBgmPlaying = true;
+            
+            // Tangga Nada Hirajoshi (Skala Tradisional Samurai Jepang)
+            const hirajoshiFreqs = [220.00, 246.94, 261.63, 329.63, 349.23, 440.00, 493.88, 523.25, 659.25];
+
+            function playNote(freq, duration, type = 'sine', volume = 0.08) {
+                if (!isBgmPlaying) return;
+                try {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                    gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + duration);
+                } catch(e) {}
+            }
+
+            // Loop Melodi Tradisional Suling Shakuhachi & Biwa
+            let step = 0;
+            bgmInterval = setInterval(() => {
+                if (!isBgmPlaying) return;
+                
+                // Melodi Utama Suling
+                if (step % 2 === 0) {
+                    const randomNote = hirajoshiFreqs[Math.floor(Math.random() * hirajoshiFreqs.length)];
+                    playNote(randomNote, 1.8, 'sine', 0.06);
+                }
+                
+                // Aksensuara Petikan Biwa / Shamisen
+                if (step % 4 === 0) {
+                    const lowNote = hirajoshiFreqs[Math.floor(Math.random() * 3)];
+                    playNote(lowNote / 2, 0.6, 'triangle', 0.12);
+                }
+
+                step++;
+            }, 800);
+        }
+
+        function toggleBGM() {
+            const btn = document.getElementById('bgmBtn');
+            if (isBgmPlaying) {
+                isBgmPlaying = false;
+                clearInterval(bgmInterval);
+                btn.innerText = "🎵 BGM: OFF";
+            } else {
+                startSamuraiBGM();
+                btn.innerText = "🎵 BGM: ON";
+            }
+        }
+
+        // --- DIALOG SISTEM ROBOT & SAMURAI ---
         const robotConversations = [
             { bot: 1, text: "Bro, bagaimana aturan ramboing di kota atau server ini?" },
             { bot: 2, text: "Hasil kerja tanpa tas maksimal 200, kalau pakai tas bisa membawa sampai 250." },
@@ -601,9 +683,9 @@
             utterance.rate = 0.95;
 
             if (currentTalk.bot === 1) {
-                utterance.pitch = 0.85; // Suara Robot
+                utterance.pitch = 0.85;
             } else {
-                utterance.pitch = 1.35; // Suara Samurai (Futuristik/Tinggi)
+                utterance.pitch = 1.35;
             }
 
             const talkBot = currentTalk.bot === 1 ? document.getElementById('bot01Container') : document.getElementById('bot02Container');
@@ -634,6 +716,7 @@
             intro.style.opacity = '0';
             setTimeout(() => {
                 intro.style.visibility = 'hidden';
+                startSamuraiBGM();
                 triggerRobotDialog(0);
             }, 1000);
         }
