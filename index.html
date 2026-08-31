@@ -3,57 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server Aturan - GTA Style</title>
+    <title>San Andreas Server - Rules & Cinematic</title>
     <style>
-        body {
-            background-color: #121212;
-            color: #ffffff;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             font-family: 'Courier New', Courier, monospace;
-            text-align: center;
-            padding: 50px;
+            color: #ffffff;
+            background-color: #0b0b0b;
         }
+
+        /* Latar Belakang Sinematik dengan Animasi Pergerakan Kamera (Ken Burns Effect) */
+        .cinematic-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(18,18,18,0.8)), 
+                        url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1920&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
+            animation: cinematicZoom 20s infinite alternate ease-in-out;
+            z-index: -1;
+        }
+
+        @keyframes cinematicZoom {
+            0% {
+                transform: scale(1) translate(0, 0);
+            }
+            100% {
+                transform: scale(1.15) translate(-10px, -10px);
+            }
+        }
+
+        /* Overlay Cahaya/Film Grain ala GTA Loading Screen */
+        .vignette {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0 0 150px rgba(0,0,0,0.9);
+            z-index: 0;
+            pointer-events: none;
+        }
+
         .container {
-            max-width: 600px;
-            margin: auto;
-            background: #1e1e1e;
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 5vh auto;
+            background: rgba(18, 18, 18, 0.85);
+            backdrop-filter: blur(8px);
             padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border-radius: 10px;
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            max-height: 90vh;
+            overflow-y: auto;
         }
+
         h1 {
             color: #f39c12;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
+
+        .subtitle {
+            text-align: center;
+            color: #aaa;
+            font-size: 13px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rules-section {
+            text-align: left;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px 20px;
+            border-radius: 6px;
+            border-left: 4px solid #f39c12;
+            margin-bottom: 20px;
+        }
+
+        .rules-section h3 {
+            color: #f39c12;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .rules-section ul {
+            padding-left: 20px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #ddd;
+        }
+
+        .control-panel {
+            text-align: center;
+            margin-top: 20px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+        }
+
         button {
             background-color: #f39c12;
             color: #121212;
             border: none;
-            padding: 12px 25px;
-            font-size: 16px;
+            padding: 12px 30px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             border-radius: 4px;
-            margin-top: 20px;
-            transition: 0.2s;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
+
         button:hover {
-            background-color: #e67e22;
+            background-color: #d68910;
+            box-shadow: 0 0 15px rgba(243, 156, 18, 0.5);
         }
+
         #status {
-            margin-top: 15px;
-            font-size: 14px;
+            margin-top: 12px;
+            font-size: 13px;
             color: #888;
         }
     </style>
 </head>
 <body>
 
+    <div class="cinematic-bg"></div>
+    <div class="vignette"></div>
+
     <div class="container">
         <h1>San Andreas Rules Server</h1>
-        <p>Tekan tombol di bawah untuk memutar melodi synth gangster ala GTA SAMP.</p>
-        <button id="playBtn" onclick="toggleMusic()">Putar Musik</button>
-        <div id="status">Status: Berhenti</div>
+        <div class="subtitle">Official Roleplay Server Guidelines</div>
+
+        <div class="rules-section">
+            <h3>1. Aturan Dasar (General Rules)</h3>
+            <ul>
+                <li>Dilarang melakukan DM (Deathmatch) atau menyerang player lain tanpa alasan jelas.</li>
+                <li>Hargai semua player dan admin yang bertugas di dalam game.</li>
+                <li>Gunakan bahasa yang sopan di global chat (`/o`).</li>
+            </ul>
+        </div>
+
+        <div class="rules-section">
+            <h3>2. Aturan Perampokan & Geng (Gang Rules)</h3>
+            <ul>
+                <li>Minimal anggota geng yang aktif melakukan rob adalah 3 orang.</li>
+                <li>Dilarang melakukan safezone camping di area bank atau hospital.</li>
+            </ul>
+        </div>
+
+        <div class="control-panel">
+            <p style="font-size: 13px; margin-bottom: 10px; color: #ccc;">Nyalakan musik G-Funk untuk pengalaman loading ala GTA SAMP:</p>
+            <button id="playBtn" onclick="toggleMusic()">Putar Musik Gangsta</button>
+            <div id="status">Status: Musik Berhenti</div>
+        </div>
     </div>
 
     <script>
@@ -61,7 +181,6 @@
         let isPlaying = false;
         let timerId = null;
 
-        // Nada dasar ala G-Funk / Hip-hop klasik (Frequencies dalam Hz)
         const bassNotes = [110, 110, 123.47, 130.81, 110, 98.00, 87.31, 98.00];
         const synthNotes = [440, 493.88, 523.25, 587.33, 523.25, 493.88, 440, 392.00];
         let step = 0;
@@ -76,9 +195,8 @@
 
             isPlaying = true;
             document.getElementById('playBtn').innerText = 'Matikan Musik';
-            document.getElementById('status').innerText = 'Status: Memutar Musik Gangsta...';
+            document.getElementById('status').innerText = 'Status: Memutar G-Funk Beat...';
 
-            // Tempo ketukan (BPM ala santai)
             timerId = setInterval(() => {
                 playGangstaBeat(audioCtx, bassNotes[step % bassNotes.length], synthNotes[step % synthNotes.length]);
                 step++;
@@ -88,8 +206,8 @@
         function stopMusic() {
             isPlaying = false;
             clearInterval(timerId);
-            document.getElementById('playBtn').innerText = 'Putar Musik';
-            document.getElementById('status').innerText = 'Status: Berhenti';
+            document.getElementById('playBtn').innerText = 'Putar Musik Gangsta';
+            document.getElementById('status').innerText = 'Status: Musik Berhenti';
         }
 
         function toggleMusic() {
@@ -103,15 +221,13 @@
         function playGangstaBeat(ctx, bassFreq, synthFreq) {
             let now = ctx.currentTime;
 
-            // 1. Suara Bass Tebal (Sub-Bass)
             let oscBass = ctx.createOscillator();
             let gainBass = ctx.createGain();
+            let filter = ctx.createBiquadFilter();
             
             oscBass.type = 'sawtooth';
             oscBass.frequency.setValueAtTime(bassFreq / 2, now);
 
-            // Filter agar suara bass lebih "mendem" khas pantai barat
-            let filter = ctx.createBiquadFilter();
             filter.type = 'lowpass';
             filter.frequency.setValueAtTime(300, now);
 
@@ -125,7 +241,6 @@
             oscBass.start(now);
             oscBass.stop(now + 0.25);
 
-            // 2. Suara Lead Synth Portamento Tinggi (High Pitch G-Funk Whistle)
             if (step % 2 === 0) {
                 let oscLead = ctx.createOscillator();
                 let gainLead = ctx.createGain();
