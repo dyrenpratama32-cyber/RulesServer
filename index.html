@@ -1,809 +1,245 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garuda Horizon Role Play - Official Store</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>GHRP Store & Assistant</title>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass-card { background: rgba(18, 18, 24, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .glow-gold { box-shadow: 0 0 25px rgba(234, 179, 8, 0.15); }
-        .page-section { display: none; }
-        .page-section.active { display: block; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #1e293b;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #3b82f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: #3b82f6;
+            font-size: 1.5rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            width: 100%;
+        }
+
+        .chat-card {
+            background-color: #1e293b;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-header {
+            background-color: #3b82f6;
+            padding: 1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+
+        .bot-message {
+            background-color: #334155;
+            color: #f8fafc;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .user-message {
+            background-color: #2563eb;
+            color: #ffffff;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .chat-input-area {
+            padding: 1rem;
+            background-color: #0f172a;
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background-color: #1e293b;
+            color: #fff;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: #3b82f6;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .quick-questions {
+            display: flex;
+            gap: 8px;
+            padding: 0.5rem 1rem;
+            background-color: #1e293b;
+            overflow-x: auto;
+            border-top: 1px solid #334155;
+        }
+
+        .chip {
+            background-color: #334155;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .chip:hover {
+            background-color: #3b82f6;
+        }
     </style>
 </head>
-<body class="bg-[#09090b] text-gray-100 min-h-screen flex flex-col selection:bg-amber-500 selection:text-black">
+<body>
 
-    <!-- HIDDEN AUDIO PLAYER (Reggae / Gangster Vibe Stream) -->
-    <audio id="bgMusic" loop>
-        <source src="https://stream.zeno.fm/f3wvbbqmdg8uv" type="audio/mp4">
-        Browser Anda tidak mendukung elemen audio.
-    </audio>
+    <header>
+        <h1>GHRP TOKO & ASSISTANT</h1>
+        <span>Server Rules AI</span>
+    </header>
 
-    <!-- FLOATING MUSIC CONTROL -->
-    <div class="fixed bottom-6 right-6 z-50 flex items-center gap-3 glass-card px-4 py-2.5 rounded-full shadow-2xl border border-amber-500/30">
-        <div class="flex items-center gap-2">
-            <span class="relative flex h-3 w-3">
-              <span id="musicPing" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75 hidden"></span>
-              <span id="musicDot" class="relative inline-flex rounded-full h-3 w-3 bg-gray-500"></span>
-            </span>
-            <span id="musicStatusText" class="text-xs font-medium text-gray-300">Reggae Vibe: Off</span>
-        </div>
-        <button onclick="toggleMusic()" id="musicBtn" class="bg-amber-500 hover:bg-amber-400 text-black w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-lg cursor-pointer">
-            <i id="musicIcon" class="fa-solid fa-play text-xs ml-0.5"></i>
-        </button>
-    </div>
+    <div class="container">
+        <div class="chat-card">
+            <div class="chat-header">
+                🤖 GHRP Rules Bot
+            </div>
 
-    <!-- NAVBAR -->
-    <nav class="sticky top-0 z-40 glass-card border-b border-white/10 px-6 py-4">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="switchPage('shop')">
-                <div class="bg-gradient-to-tr from-amber-600 to-amber-400 p-2.5 rounded-xl shadow-lg">
-                    <i class="fa-solid fa-crown text-black text-xl font-bold"></i>
-                </div>
-                <div>
-                    <h1 class="font-extrabold text-lg tracking-wider text-white">GARUDA HORIZON</h1>
-                    <p class="text-[10px] tracking-widest text-amber-400 font-semibold uppercase">Roleplay Official Store</p>
+            <div class="chat-messages" id="chatBox">
+                <div class="message bot-message">
+                    Halo! Saya AI Bot GHRP. Silakan tanyakan aturan server (Rules) seputar RDM, VDM, New Life Rule, MetaGaming, atau sistem Toko GHRP.
                 </div>
             </div>
 
-            <div class="hidden md:flex items-center gap-8 font-medium text-sm text-gray-300">
-                <button onclick="switchPage('shop')" class="hover:text-amber-400 transition cursor-pointer">Katalog Toko</button>
-                <button onclick="switchPage('cart')" class="hover:text-amber-400 transition flex items-center gap-2 cursor-pointer">
-                    <i class="fa-solid fa-cart-shopping"></i> Keranjang <span id="cartCount" class="bg-amber-500 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
-                </button>
-                <button onclick="openDevModal()" class="text-gray-500 hover:text-amber-400 transition text-xs flex items-center gap-1.5 cursor-pointer">
-                    <i class="fa-solid fa-shield-halved"></i> Dev Portal
-                </button>
+            <div class="quick-questions">
+                <div class="chip" onclick="askQuick('Apa itu RDM?')">Apa itu RDM?</div>
+                <div class="chip" onclick="askQuick('Apa itu VDM?')">Apa itu VDM?</div>
+                <div class="chip" onclick="askQuick('Aturan New Life Rule (NLR)')">Aturan NLR</div>
+                <div class="chip" onclick="askQuick('Apa itu MetaGaming?')">MetaGaming</div>
             </div>
 
-            <!-- Mobile Cart Button -->
-            <div class="flex items-center gap-3 md:hidden">
-                <button onclick="switchPage('cart')" class="relative p-2 glass-card rounded-xl">
-                    <i class="fa-solid fa-cart-shopping text-amber-400"></i>
-                    <span id="cartCountMobile" class="absolute -top-1 -right-1 bg-amber-500 text-black text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
-                </button>
-                <button onclick="openDevModal()" class="p-2 glass-card rounded-xl text-gray-400">
-                    <i class="fa-solid fa-shield-halved"></i>
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- MAIN CONTAINER -->
-    <main class="max-w-7xl mx-auto px-6 py-10 flex-grow w-full">
-
-        <!-- PAGE: SHOP / KATALOG -->
-        <section id="page-shop" class="page-section active">
-            <!-- Hero Banner -->
-            <div class="relative rounded-3xl overflow-hidden glass-card p-8 md:p-12 mb-12 border border-amber-500/20 glow-gold">
-                <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="max-w-2xl relative z-10">
-                    <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-3 py-1 rounded-full font-semibold uppercase tracking-wider">Garuda Horizon RP v3.5 Store</span>
-                    <h2 class="text-3xl md:text-5xl font-extrabold mt-4 mb-4 text-white leading-tight">LIMITED VEHICLES & EXCLUSIVE VIP PASS</h2>
-                    <p class="text-gray-400 text-sm md:text-base mb-6">Dapatkan koleksi kendaraan SA-MP eksklusif tanpa tank dan tingkatkan status sosial karaktermu di kota dengan paket VIP premium!</p>
-                    <div class="flex items-center gap-4">
-                        <a href="#katalog" class="bg-amber-500 hover:bg-amber-400 text-black font-bold px-6 py-3 rounded-xl transition shadow-lg shadow-amber-500/20 text-sm">Lihat Katalog</a>
-                        <div class="text-xs text-amber-400 bg-amber-500/10 border border-amber-500/30 px-3 py-2 rounded-xl flex items-center gap-2">
-                            <i class="fa-solid fa-tag"></i> Gunakan kode <b>GHRP2026</b> untuk diskon 20%!
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Filter Kategori -->
-            <div id="katalog" class="flex items-center justify-between mb-8 flex-wrap gap-4">
-                <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-fire text-amber-400"></i> Etalase Barang & Kendaraan
-                </h3>
-                <div class="flex gap-2 flex-wrap">
-                    <button onclick="filterCategory('all')" class="cat-btn bg-amber-500 text-black px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer">Semua</button>
-                    <button onclick="filterCategory('vip')" class="cat-btn bg-white/5 hover:bg-white/10 text-gray-300 px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">Paket VIP</button>
-                    <button onclick="filterCategory('udara')" class="cat-btn bg-white/5 hover:bg-white/10 text-gray-300 px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">Kendaraan Udara</button>
-                    <button onclick="filterCategory('darat')" class="cat-btn bg-white/5 hover:bg-white/10 text-gray-300 px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">Kendaraan Darat</button>
-                </div>
-            </div>
-
-            <!-- Grid Produk -->
-            <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-                
-                <!-- VIP Item 1 -->
-                <div class="glass-card rounded-2xl overflow-hidden group hover:border-amber-500/50 transition duration-300 flex flex-col justify-between border-amber-500/30" data-category="vip">
-                    <div>
-                        <div class="relative h-48 overflow-hidden bg-gradient-to-br from-amber-900/40 to-black flex items-center justify-center">
-                            <i class="fa-solid fa-crown text-amber-400 text-6xl group-hover:scale-110 transition duration-500"></i>
-                            <span class="absolute top-3 left-3 bg-amber-500 text-black text-[10px] font-bold px-2.5 py-1 rounded-lg">VIP Pass</span>
-                            <span class="absolute top-3 right-3 bg-black/60 text-amber-400 text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md border border-amber-500/30">VIP</span>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg text-white mb-1">VIP Bronze (30 Hari)</h4>
-                            <p class="text-gray-400 text-xs mb-4">Akses `/vipsay`, `/heal`, plat nomor kustom, dan slot parkir kendaraan tambahan.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-amber-400 font-extrabold text-lg">Rp 50.000</span>
-                                <span class="text-[11px] text-gray-500 line-through">Rp 75.000</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <button onclick="addToCart('VIP Bronze (30 Hari)', 50000)" class="w-full bg-white/10 hover:bg-amber-500 hover:text-black text-white font-semibold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer">
-                            <i class="fa-solid fa-cart-plus"></i> Tambah ke Keranjang
-                        </button>
-                    </div>
-                </div>
-
-                <!-- VIP Item 2 -->
-                <div class="glass-card rounded-2xl overflow-hidden group hover:border-amber-500/50 transition duration-300 flex flex-col justify-between border-amber-500/30" data-category="vip">
-                    <div>
-                        <div class="relative h-48 overflow-hidden bg-gradient-to-br from-yellow-600/40 to-black flex items-center justify-center">
-                            <i class="fa-solid fa-gem text-amber-300 text-6xl group-hover:scale-110 transition duration-500"></i>
-                            <span class="absolute top-3 left-3 bg-amber-400 text-black text-[10px] font-bold px-2.5 py-1 rounded-lg">Best Value</span>
-                            <span class="absolute top-3 right-3 bg-black/60 text-amber-400 text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md border border-amber-500/30">VIP</span>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg text-white mb-1">VIP Gold (Permanent / Lifetime)</h4>
-                            <p class="text-gray-400 text-xs mb-4">Akses VIP seumur hidup, command eksklusif, prioritas login, dan bonus modal awal.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-amber-400 font-extrabold text-lg">Rp 175.000</span>
-                                <span class="text-[11px] text-gray-500 line-through">Rp 250.000</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <button onclick="addToCart('VIP Gold (Permanent / Lifetime)', 175000)" class="w-full bg-white/10 hover:bg-amber-500 hover:text-black text-white font-semibold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer">
-                            <i class="fa-solid fa-cart-plus"></i> Tambah ke Keranjang
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Product: Jet Tempur -->
-                <div class="glass-card rounded-2xl overflow-hidden group hover:border-amber-500/50 transition duration-300 flex flex-col justify-between" data-category="udara">
-                    <div>
-                        <div class="relative h-48 overflow-hidden bg-black/40">
-                            <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=600&q=80" alt="Jet Tempur" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80">
-                            <span class="absolute top-3 left-3 bg-red-500/80 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md">Sisa 3 Unit</span>
-                            <span class="absolute top-3 right-3 bg-black/60 text-amber-400 text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md border border-amber-500/30">Udara</span>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg text-white mb-1">Hydra Military Jet "Garuda-01"</h4>
-                            <p class="text-gray-400 text-xs mb-4">Jet tempur udara berkecepatan tinggi dengan sistem navigasi kustom khusus GHRP.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-amber-400 font-extrabold text-lg">Rp 150.000</span>
-                                <span class="text-[11px] text-gray-500 line-through">Rp 250.000</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <button onclick="addToCart('Hydra Military Jet \"Garuda-01\"', 150000)" class="w-full bg-white/10 hover:bg-amber-500 hover:text-black text-white font-semibold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer">
-                            <i class="fa-solid fa-cart-plus"></i> Tambah ke Keranjang
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Product: Helikopter -->
-                <div class="glass-card rounded-2xl overflow-hidden group hover:border-amber-500/50 transition duration-300 flex flex-col justify-between" data-category="udara">
-                    <div>
-                        <div class="relative h-48 overflow-hidden bg-black/40">
-                            <img src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=600&q=80" alt="Helikopter" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80">
-                            <span class="absolute top-3 left-3 bg-amber-500 text-black text-[10px] font-bold px-2.5 py-1 rounded-lg">Limited Edition</span>
-                            <span class="absolute top-3 right-3 bg-black/60 text-amber-400 text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md border border-amber-500/30">Udara</span>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg text-white mb-1">Maverick VIP Helicopter</h4>
-                            <p class="text-gray-400 text-xs mb-4">Helikopter mewah berkecepatan tinggi dilengkapi interior privat Horizon.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-amber-400 font-extrabold text-lg">Rp 100.000</span>
-                                <span class="text-[11px] text-gray-500 line-through">Rp 175.000</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <button onclick="addToCart('Maverick VIP Helicopter', 100000)" class="w-full bg-white/10 hover:bg-amber-500 hover:text-black text-white font-semibold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer">
-                            <i class="fa-solid fa-cart-plus"></i> Tambah ke Keranjang
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Product: Jet Pribadi -->
-                <div class="glass-card rounded-2xl overflow-hidden group hover:border-amber-500/50 transition duration-300 flex flex-col justify-between" data-category="udara">
-                    <div>
-                        <div class="relative h-48 overflow-hidden bg-black/40">
-                            <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=600&q=80" alt="Jet Pribadi" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80">
-                            <span class="absolute top-3 left-3 bg-purple-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg">Luxury</span>
-                            <span class="absolute top-3 right-3 bg-black/60 text-amber-400 text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md border border-amber-500/30">Udara</span>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg text-white mb-1">Shamal Private Jet</h4>
-                            <p class="text-gray-400 text-xs mb-4">Pesawat jet pribadi sultan kota untuk penerbangan lintas bandara LS ke SF.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-amber-400 font-extrabold text-lg">Rp 220.000</span>
-                                <span class="text-[11px] text-gray-500 line-through">Rp 300.000</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <button onclick="addToCart('Shamal Private Jet', 220000)" class="w-full bg-white/10 hover:bg-amber-500 hover:text-black text-white font-semibold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer">
-                            <i class="fa-solid fa-cart-plus"></i> Tambah ke Keranjang
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Product: Mobil Sport -->
-                <div class="glass-card rounded-2xl overflow-hidden group hover:border-amber-500/50 transition duration-300 flex flex-col justify-between" data-category="darat">
-                    <div>
-                        <div class="relative h-48 overflow-hidden bg-black/40">
-                            <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80" alt="Mobil Sport" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80">
-                            <span class="absolute top-3 left-3 bg-amber-500 text-black text-[10px] font-bold px-2.5 py-1 rounded-lg">Best Seller</span>
-                            <span class="absolute top-3 right-3 bg-black/60 text-amber-400 text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md border border-amber-500/30">Darat</span>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg text-white mb-1">Bullet GT Horizon Spec</h4>
-                            <p class="text-gray-400 text-xs mb-4">Mobil sport papan atas dengan handling kustom dan top speed maksimal.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-amber-400 font-extrabold text-lg">Rp 85.000</span>
-                                <span class="text-[11px] text-gray-500 line-through">Rp 120.000</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <button onclick="addToCart('Bullet GT Horizon Spec', 85000)" class="w-full bg-white/10 hover:bg-amber-500 hover:text-black text-white font-semibold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer">
-                            <i class="fa-solid fa-cart-plus"></i> Tambah ke Keranjang
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Product: Motor Sport -->
-                <div class="glass-card rounded-2xl overflow-hidden group hover:border-amber-500/50 transition duration-300 flex flex-col justify-between" data-category="darat">
-                    <div>
-                        <div class="relative h-48 overflow-hidden bg-black/40">
-                            <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=600&q=80" alt="Motor Sport" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80">
-                            <span class="absolute top-3 left-3 bg-red-500/80 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md">Sisa 2 Unit</span>
-                            <span class="absolute top-3 right-3 bg-black/60 text-amber-400 text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md border border-amber-500/30">Darat</span>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg text-white mb-1">NRG-500 Twin Turbo</h4>
-                            <p class="text-gray-400 text-xs mb-4">Motor sport balap jalanan paling diburu untuk adu kecepatan.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-amber-400 font-extrabold text-lg">Rp 75.000</span>
-                                <span class="text-[11px] text-gray-500 line-through">Rp 110.000</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <button onclick="addToCart('NRG-500 Twin Turbo', 75000)" class="w-full bg-white/10 hover:bg-amber-500 hover:text-black text-white font-semibold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer">
-                            <i class="fa-solid fa-cart-plus"></i> Tambah ke Keranjang
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Product: Mobil Militer -->
-                <div class="glass-card rounded-2xl overflow-hidden group hover:border-amber-500/50 transition duration-300 flex flex-col justify-between" data-category="darat">
-                    <div>
-                        <div class="relative h-48 overflow-hidden bg-black/40">
-                            <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80" alt="Mobil Militer" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80">
-                            <span class="absolute top-3 left-3 bg-amber-500 text-black text-[10px] font-bold px-2.5 py-1 rounded-lg">Anti-Bullet</span>
-                            <span class="absolute top-3 right-3 bg-black/60 text-amber-400 text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md border border-amber-500/30">Darat</span>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg text-white mb-1">Patriot Tactical Armored</h4>
-                            <p class="text-gray-400 text-xs mb-4">Kendaraan taktis militer tangguh anti peluru untuk pengawalan konvoi.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-amber-400 font-extrabold text-lg">Rp 95.000</span>
-                                <span class="text-[11px] text-gray-500 line-through">Rp 140.000</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <button onclick="addToCart('Patriot Tactical Armored', 95000)" class="w-full bg-white/10 hover:bg-amber-500 hover:text-black text-white font-semibold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer">
-                            <i class="fa-solid fa-cart-plus"></i> Tambah ke Keranjang
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- SECTION: TESTIMONI PLAYER GHRP -->
-            <div class="mb-8">
-                <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                    <i class="fa-solid fa-comments text-amber-400"></i> Testimoni Warga Kota GHRP
-                </h3>
-                <p class="text-gray-400 text-xs mb-6">Apa kata mereka yang sudah membeli aset dan kendaraan eksklusif di store resmi kami.</p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Testi 1 -->
-                    <div class="glass-card p-6 rounded-2xl border border-white/5 relative">
-                        <div class="flex items-center gap-1 text-amber-400 text-xs mb-3">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                        </div>
-                        <p class="text-gray-300 text-xs italic mb-4">"Beli Hydra Jet prosesnya cepet banget ga sampe 5 menit langsung masuk ke garasi in-game. Mantap pol admin GHRP!"</p>
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 font-bold flex items-center justify-center text-xs">J</div>
-                            <div>
-                                <h5 class="text-white text-xs font-bold">John_Garuda</h5>
-                                <span class="text-[10px] text-emerald-400">Verified Buyer (Hydra Jet)</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Testi 2 -->
-                    <div class="glass-card p-6 rounded-2xl border border-white/5 relative">
-                        <div class="flex items-center gap-1 text-amber-400 text-xs mb-3">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                        </div>
-                        <p class="text-gray-300 text-xs italic mb-4">"Nyesel baru beli VIP Gold sekarang, fiturnya bener-bener ngebantu buat roleplay jadi makin asik dan keren di kota!"</p>
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 font-bold flex items-center justify-center text-xs">B</div>
-                            <div>
-                                <h5 class="text-white text-xs font-bold">Budi_Santoso</h5>
-                                <span class="text-[10px] text-emerald-400">Verified Buyer (VIP Gold)</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Testi 3 -->
-                    <div class="glass-card p-6 rounded-2xl border border-white/5 relative">
-                        <div class="flex items-center gap-1 text-amber-400 text-xs mb-3">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                        </div>
-                        <p class="text-gray-300 text-xs italic mb-4">"Pake kode kupon diskon tadi langsung potong harga lumayan banget. NRG-500 nya gacor di jalan tol LS!"</p>
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 font-bold flex items-center justify-center text-xs">A</div>
-                            <div>
-                                <h5 class="text-white text-xs font-bold">Alex_Vercetti</h5>
-                                <span class="text-[10px] text-emerald-400">Verified Buyer (NRG-500)</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE: KERANJANG & CHECKOUT -->
-        <section id="page-cart" class="page-section">
-            <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
-                <i class="fa-solid fa-cart-shopping text-amber-400"></i> Keranjang Belanja Anda
-            </h2>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Daftar Item -->
-                <div class="lg:col-span-2 glass-card rounded-2xl p-6">
-                    <div id="cartItemsList" class="divide-y divide-white/10">
-                        <div class="py-8 text-center text-gray-500 text-sm">Keranjang belanja Anda masih kosong.</div>
-                    </div>
-                </div>
-
-                <!-- Ringkasan Checkout & Kupon -->
-                <div class="glass-card rounded-2xl p-6 h-fit border border-amber-500/20 space-y-5">
-                    <h3 class="font-bold text-lg text-white">Ringkasan Pesanan</h3>
-
-                    <!-- Fitur Input Kupon Diskon -->
-                    <div class="bg-black/40 p-3.5 rounded-xl border border-white/5">
-                        <label class="block text-xs font-semibold text-gray-400 mb-1.5">Punya Kode Kupon?</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="couponInput" placeholder="Cth: GHRP2026" class="w-full bg-black/60 border border-white/10 rounded-lg px-3 py-2 text-xs text-white uppercase focus:outline-none focus:border-amber-500">
-                            <button type="button" onclick="applyCoupon()" class="bg-amber-500 hover:bg-amber-400 text-black font-bold px-4 rounded-lg text-xs transition cursor-pointer">Pakai</button>
-                        </div>
-                        <p id="couponMsg" class="text-[10px] mt-1.5 text-gray-500">Gunakan kode <b class="text-amber-400">GHRP2026</b> untuk diskon 20%</p>
-                    </div>
-
-                    <div class="space-y-2 text-sm text-gray-300 border-b border-white/10 pb-4">
-                        <div class="flex justify-between">
-                            <span>Total Item</span>
-                            <span id="summaryCount">0 item</span>
-                        </div>
-                        <div id="discountRow" class="flex justify-between text-emerald-400 hidden">
-                            <span>Diskon Kupon (20%)</span>
-                            <span id="summaryDiscount">-Rp 0</span>
-                        </div>
-                        <div class="flex justify-between font-bold text-white text-base pt-2">
-                            <span>Total Harga</span>
-                            <span id="summaryTotal" class="text-amber-400">Rp 0</span>
-                        </div>
-                    </div>
-
-                    <form id="checkoutForm" onsubmit="processCheckout(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Nama Karakter In-Game (IC)</label>
-                            <input type="text" id="ign" required placeholder="Contoh: John_Garuda" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Nomor WhatsApp / Discord Tag</label>
-                            <input type="text" id="contact" required placeholder="Contoh: 08123456789 / user#0001" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Metode Pembayaran</label>
-                            <select class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500">
-                                <option>QRIS (All Payment / GoPay / OVO / Dana)</option>
-                                <option>Transfer BCA / Mandiri</option>
-                                <option>Pulsa Telkomsel / Indosat</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold py-3 rounded-xl text-sm transition shadow-lg shadow-amber-500/20 cursor-pointer">
-                            Konfirmasi & Pesan Sekarang
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE: SUCCESS ORDER -->
-        <section id="page-success" class="page-section">
-            <div class="max-w-md mx-auto text-center glass-card rounded-3xl p-8 border border-amber-500/30 mt-12">
-                <div class="w-16 h-16 bg-emerald-500/20 border border-emerald-500 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">
-                    <i class="fa-solid fa-check"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-white mb-2">Pesanan Berhasil Dibuat!</h3>
-                <p class="text-gray-400 text-xs mb-6">Data pesanan Anda telah masuk ke sistem server Garuda Horizon RP. Silakan lakukan pembayaran sesuai metode yang dipilih.</p>
-                <div class="bg-black/40 rounded-xl p-4 text-left text-xs space-y-2 mb-6 border border-white/5">
-                    <div class="flex justify-between"><span class="text-gray-500">ID Transaksi:</span> <span id="resId" class="font-mono text-amber-400">#GHRP-9821</span></div>
-                    <div class="flex justify-between"><span class="text-gray-500">Karakter IC:</span> <span id="resIgn" class="font-semibold text-white">-</span></div>
-                    <div class="flex justify-between"><span class="text-gray-500">Total Tagihan:</span> <span id="resTotal" class="font-semibold text-amber-400">-</span></div>
-                </div>
-                <button onclick="switchPage('shop')" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-2.5 rounded-xl text-xs transition cursor-pointer">
-                    Kembali ke Beranda
-                </button>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="glass-card border-t border-white/10 py-6 px-6 text-center text-xs text-gray-500 mt-auto">
-        <p>&copy; 2026 Kota Garuda Horizon Role Play. All rights reserved. Not affiliated with Rockstar Games.</p>
-    </footer>
-
-    <!-- DEVELOPER LOGIN MODAL -->
-    <div id="devModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="glass-card rounded-2xl max-w-sm w-full p-6 border border-amber-500/30 relative">
-            <button onclick="closeDevModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
-            <div class="text-center mb-6">
-                <div class="w-12 h-12 bg-amber-500/10 border border-amber-500/30 text-amber-400 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <i class="fa-solid fa-lock text-lg"></i>
-                </div>
-                <h3 class="font-bold text-lg text-white">Developer Portal</h3>
-                <p class="text-gray-400 text-xs">Masukkan PIN Rahasia Developer</p>
-            </div>
-            <div class="space-y-4">
-                <input type="password" id="devPinInput" placeholder="Masukkan PIN Developer" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-center tracking-widest text-white focus:outline-none focus:border-amber-500">
-                <button onclick="verifyDevPin()" class="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold py-2.5 rounded-xl text-xs transition cursor-pointer">Akses Dashboard</button>
+            <div class="chat-input-area">
+                <input type="text" id="userInput" placeholder="Tanyakan seputar rules server..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()">Kirim</button>
             </div>
         </div>
     </div>
 
-    <!-- DEVELOPER DASHBOARD MODAL (PESANAN) -->
-    <div id="devDashboard" class="fixed inset-0 z-50 bg-[#09090b] hidden overflow-y-auto p-6 md:p-10">
-        <div class="max-w-5xl mx-auto">
-            <div class="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
-                <div>
-                    <span class="text-amber-400 text-xs font-bold uppercase tracking-wider">Dashboard Khusus Developer</span>
-                    <h2 class="text-2xl font-extrabold text-white">Manajemen Pesanan Toko GHRP</h2>
-                </div>
-                <button onclick="closeDevDashboard()" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
-                    <i class="fa-solid fa-arrow-left mr-1"></i> Keluar Portal
-                </button>
-            </div>
-
-            <!-- Statistik Singkat -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="glass-card p-5 rounded-2xl border border-white/5">
-                    <p class="text-gray-400 text-xs">Total Pesanan Masuk</p>
-                    <h3 id="statTotalOrders" class="text-2xl font-bold text-white mt-1">0</h3>
-                </div>
-                <div class="glass-card p-5 rounded-2xl border border-white/5">
-                    <p class="text-gray-400 text-xs">Pendapatan Pending</p>
-                    <h3 id="statTotalRevenue" class="text-2xl font-bold text-amber-400 mt-1">Rp 0</h3>
-                </div>
-                <div class="glass-card p-5 rounded-2xl border border-white/5">
-                    <p class="text-gray-400 text-xs">Status Server Store</p>
-                    <h3 class="text-2xl font-bold text-emerald-400 mt-1 flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span> Online</h3>
-                </div>
-            </div>
-
-            <!-- Tabel Daftar Pesanan -->
-            <div class="glass-card rounded-2xl overflow-hidden border border-white/10">
-                <div class="p-5 border-b border-white/10 flex justify-between items-center">
-                    <h4 class="font-bold text-white text-sm">Daftar Transaksi Real-Time</h4>
-                    <button onclick="loadOrders()" class="text-xs text-amber-400 hover:underline cursor-pointer"><i class="fa-solid fa-rotate-right mr-1"></i> Refresh</button>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs">
-                        <thead class="bg-white/5 text-gray-400 border-b border-white/10">
-                            <tr>
-                                <th class="p-4">ID Transaksi</th>
-                                <th class="p-4">Karakter IC</th>
-                                <th class="p-4">Kontak</th>
-                                <th class="p-4">Item Pesanan</th>
-                                <th class="p-4">Total</th>
-                                <th class="p-4">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="orderTableBody" class="divide-y divide-white/5 text-gray-300">
-                            <!-- Diisi via JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // --- 1. MUSIC PLAYER LOGIC (Continuous Reggae Stream) ---
-        const bgMusic = document.getElementById('bgMusic');
-        const musicBtn = document.getElementById('musicBtn');
-        const musicIcon = document.getElementById('musicIcon');
-        const musicStatusText = document.getElementById('musicStatusText');
-        const musicPing = document.getElementById('musicPing');
-        const musicDot = document.getElementById('musicDot');
-        let isPlaying = false;
+        // Database Rules Server GHRP
+        const serverRules = {
+            "rdm": "<b>RDM (Random Deathmatch):</b> Membunuh atau menyerang pemain lain tanpa alasan Roleplay (RP) yang jelas dan valid.",
+            "vdm": "<b>VDM (Vehicle Deathmatch):</b> Menggunakan kendaraan sebagai senjata untuk menabrak atau membunuh pemain lain tanpa alasan RP.",
+            "nlr": "<b>NLR (New Life Rule):</b> Jika karakter Anda "Lembaga/Pingsan/Mati" dan di-respawn di Rumah Sakit, Anda lupa akan kejadian sebelum mati dan tidak boleh kembali ke lokasi kejadian dalam kurun waktu tertentu.",
+            "metagaming": "<b>MetaGaming (MG):</b> Menggunakan informasi dari luar game (OOC/Discord/Livestream) untuk kepentingan dalam game (IC).",
+            "powergaming": "<b>PowerGaming (PG):</b> Melakukan hal-hal yang tidak manusiawi atau tidak masuk akal secara realitas di dalam server RP.",
+            "failrp": "<b>Fail RP:</b> Gagal melakukan roleplay sesuai standar atau keluar dari peran karakter secara sengaja.",
+            "ooc": "<b>OOC (Out of Character):</b> Pembicaraan atau tindakan di luar karakter RP.",
+            "ic": "<b>IC (In Character):</b> Segala hal yang berkaitan langsung dengan karakter dalam game."
+        };
 
-        function toggleMusic() {
-            if (isPlaying) {
-                bgMusic.pause();
-                musicIcon.className = "fa-solid fa-play text-xs ml-0.5";
-                musicStatusText.innerText = "Reggae Vibe: Off";
-                musicPing.classList.add('hidden');
-                musicDot.className = "relative inline-flex rounded-full h-3 w-3 bg-gray-500";
-                isPlaying = false;
-            } else {
-                bgMusic.play().then(() => {
-                    musicIcon.className = "fa-solid fa-pause text-xs";
-                    musicStatusText.innerText = "Reggae Vibe: Playing";
-                    musicPing.classList.remove('hidden');
-                    musicDot.className = "relative inline-flex rounded-full h-3 w-3 bg-emerald-400";
-                    isPlaying = true;
-                }).catch(e => {
-                    alert("Klik sekali lagi pada halaman untuk mengizinkan audio diputar otomatis.");
-                });
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+
+            if (message === '') return;
+
+            // Tampilkan pesan user
+            appendMessage(message, 'user-message');
+            input.value = '';
+
+            // Cari jawaban AI
+            setTimeout(() => {
+                const botResponse = getBotResponse(message.toLowerCase());
+                appendMessage(botResponse, 'bot-message');
+            }, 400);
+        }
+
+        function askQuick(text) {
+            document.getElementById('userInput').value = text;
+            sendMessage();
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
             }
         }
 
-        // --- 2. PAGE NAVIGATION ---
-        function switchPage(pageId) {
-            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById('page-' + pageId).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            if(pageId === 'cart') renderCart();
+        function appendMessage(text, className) {
+            const chatBox = document.getElementById('chatBox');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${className}`;
+            messageDiv.innerHTML = text;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // --- 3. FILTER KATALOG ---
-        function filterCategory(category) {
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.className = "cat-btn bg-white/5 hover:bg-white/10 text-gray-300 px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer";
-            });
-            event.target.className = "cat-btn bg-amber-500 text-black px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer";
-
-            const cards = document.querySelectorAll('#productGrid > div');
-            cards.forEach(card => {
-                if (category === 'all' || card.getAttribute('data-category') === category) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
+        function getBotResponse(query) {
+            for (let key in serverRules) {
+                if (query.includes(key)) {
+                    return serverRules[key];
                 }
-            });
-        }
-
-        // --- 4. CART & COUPON MANAGEMENT ---
-        let cart = JSON.parse(localStorage.getItem('ghrp_cart')) || [];
-        let discountRate = 0; // 0% atau 0.20 (20%)
-        let appliedCouponName = '';
-
-        function addToCart(name, price) {
-            const existing = cart.find(item => item.name === name);
-            if (existing) {
-                existing.qty += 1;
-            } else {
-                cart.push({ name, price, qty: 1 });
             }
-            saveCart();
-            alert(`Berhasil menambahkan ${name} ke keranjang!`);
-        }
-
-        function saveCart() {
-            localStorage.setItem('ghrp_cart', JSON.stringify(cart));
-            updateCartBadge();
-        }
-
-        function updateCartBadge() {
-            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
-            document.getElementById('cartCount').innerText = totalCount;
-            document.getElementById('cartCountMobile').innerText = totalCount;
-        }
-        updateCartBadge();
-
-        function applyCoupon() {
-            const code = document.getElementById('couponInput').value.trim().toUpperCase();
-            const msg = document.getElementById('couponMsg');
-            
-            if (code === 'GHRP2026') {
-                discountRate = 0.20;
-                appliedCouponName = 'GHRP2026';
-                msg.innerHTML = `<span class="text-emerald-400 font-bold"><i class="fa-solid fa-check"></i> Kupon GHRP2026 Berhasil! Diskon 20% aktif.</span>`;
-                renderCart();
-            } else {
-                discountRate = 0;
-                appliedCouponName = '';
-                msg.innerHTML = `<span class="text-red-400"><i class="fa-solid fa-xmark"></i> Kode kupon tidak valid!</span>`;
-                renderCart();
-            }
-        }
-
-        function renderCart() {
-            const listContainer = document.getElementById('cartItemsList');
-            if (cart.length === 0) {
-                listContainer.innerHTML = `<div class="py-8 text-center text-gray-500 text-sm">Keranjang belanja Anda masih kosong.</div>`;
-                document.getElementById('summaryCount').innerText = '0 item';
-                document.getElementById('summaryTotal').innerText = 'Rp 0';
-                document.getElementById('discountRow').classList.add('hidden');
-                return;
-            }
-
-            let html = '';
-            let totalQty = 0;
-            let subtotal = 0;
-
-            cart.forEach((item, index) => {
-                totalQty += item.qty;
-                subtotal += item.price * item.qty;
-                html += `
-                    <div class="py-4 flex items-center justify-between gap-4">
-                        <div>
-                            <h4 class="font-bold text-white text-sm">${item.name}</h4>
-                            <p class="text-amber-400 text-xs">Rp ${item.price.toLocaleString('id-ID')} x ${item.qty}</p>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <button onclick="changeQty(${index}, -1)" class="w-7 h-7 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold flex items-center justify-center cursor-pointer">-</button>
-                            <span class="text-xs font-semibold">${item.qty}</span>
-                            <button onclick="changeQty(${index}, 1)" class="w-7 h-7 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold flex items-center justify-center cursor-pointer">+</button>
-                            <button onclick="removeItem(${index})" class="text-red-400 hover:text-red-300 ml-2 text-xs cursor-pointer"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            let discountAmount = subtotal * discountRate;
-            let finalTotal = subtotal - discountAmount;
-
-            listContainer.innerHTML = html;
-            document.getElementById('summaryCount').innerText = totalQty + ' item';
-
-            if (discountRate > 0) {
-                document.getElementById('discountRow').classList.remove('hidden');
-                document.getElementById('summaryDiscount').innerText = '-Rp ' + discountAmount.toLocaleString('id-ID');
-            } else {
-                document.getElementById('discountRow').classList.add('hidden');
-            }
-
-            document.getElementById('summaryTotal').innerText = 'Rp ' + finalTotal.toLocaleString('id-ID');
-        }
-
-        function changeQty(index, delta) {
-            cart[index].qty += delta;
-            if (cart[index].qty <= 0) {
-                cart.splice(index, 1);
-            }
-            saveCart();
-            renderCart();
-        }
-
-        function removeItem(index) {
-            cart.splice(index, 1);
-            saveCart();
-            renderCart();
-        }
-
-        // --- 5. CHECKOUT & ORDERS DATABASE ---
-        function processCheckout(e) {
-            e.preventDefault();
-            if (cart.length === 0) return alert('Keranjang kosong!');
-
-            const ign = document.getElementById('ign').value;
-            const contact = document.getElementById('contact').value;
-            
-            let subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            let total = subtotal - (subtotal * discountRate);
-            
-            const orderId = '#GHRP-' + Math.floor(1000 + Math.random() * 9000);
-
-            const newOrder = {
-                id: orderId,
-                ign: ign,
-                contact: contact,
-                items: [...cart],
-                total: total,
-                coupon: appliedCouponName ? appliedCouponName : 'Tidak ada',
-                date: new Date().toLocaleString()
-            };
-
-            let orders = JSON.parse(localStorage.getItem('ghrp_orders')) || [];
-            orders.unshift(newOrder);
-            localStorage.setItem('ghrp_orders', JSON.stringify(orders));
-
-            // Set Success UI
-            document.getElementById('resId').innerText = orderId;
-            document.getElementById('resIgn').innerText = ign;
-            document.getElementById('resTotal').innerText = 'Rp ' + total.toLocaleString('id-ID');
-
-            // Clear Cart & Coupon
-            cart = [];
-            discountRate = 0;
-            appliedCouponName = '';
-            saveCart();
-
-            switchPage('success');
-        }
-
-        // --- 6. DEVELOPER PORTAL SECURITY (PIN: I3GEN77GB) ---
-        function openDevModal() {
-            document.getElementById('devModal').classList.remove('hidden');
-        }
-
-        function closeDevModal() {
-            document.getElementById('devModal').classList.add('hidden');
-            document.getElementById('devPinInput').value = '';
-        }
-
-        function verifyDevPin() {
-            const pin = document.getElementById('devPinInput').value;
-            if (pin === 'I3GEN77GB') { 
-                closeDevModal();
-                openDevDashboard();
-            } else {
-                alert('PIN Salah! Akses khusus developer ditolak.');
-            }
-        }
-
-        function openDevDashboard() {
-            document.getElementById('devDashboard').classList.remove('hidden');
-            loadOrders();
-        }
-
-        function closeDevDashboard() {
-            document.getElementById('devDashboard').classList.add('hidden');
-        }
-
-        function loadOrders() {
-            const orders = JSON.parse(localStorage.getItem('ghrp_orders')) || [];
-            document.getElementById('statTotalOrders').innerText = orders.length;
-
-            let totalRev = orders.reduce((sum, o) => sum + o.total, 0);
-            document.getElementById('statTotalRevenue').innerText = 'Rp ' + totalRev.toLocaleString('id-ID');
-
-            const tbody = document.getElementById('orderTableBody');
-            if (orders.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-gray-500">Belum ada pesanan masuk.</td></tr>`;
-                return;
-            }
-
-            let html = '';
-            orders.forEach(o => {
-                let itemNames = o.items.map(i => `${i.name} (x${i.qty})`).join(', ');
-                html += `
-                    <tr class="hover:bg-white/5 transition">
-                        <td class="p-4 font-mono text-amber-400 font-bold">${o.id}</td>
-                        <td class="p-4 font-semibold text-white">${o.ign}</td>
-                        <td class="p-4 text-gray-400">${o.contact}</td>
-                        <td class="p-4 text-gray-300 max-w-xs truncate">${itemNames} (Kupon: ${o.coupon})</td>
-                        <td class="p-4 font-bold text-amber-400">Rp ${o.total.toLocaleString('id-ID')}</td>
-                        <td class="p-4">
-                            <button onclick="completeOrder('${o.id}')" class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-lg hover:bg-emerald-500 hover:text-black transition font-semibold cursor-pointer">Selesai</button>
-                        </td>
-                    </tr>
-                `;
-            });
-            tbody.innerHTML = html;
-        }
-
-        function completeOrder(orderId) {
-            let orders = JSON.parse(localStorage.getItem('ghrp_orders')) || [];
-            orders = orders.filter(o => o.id !== orderId);
-            localStorage.setItem('ghrp_orders', JSON.stringify(orders));
-            loadOrders();
-            alert(`Pesanan ${orderId} telah diselesaikan.`);
+            return "Maaf, saya tidak menemukan aturan spesifik terkait hal tersebut. Silakan baca rules lengkap di Discord resmi GHRP atau tanyakan ke Admin/Staff.";
         }
     </script>
 </body>
