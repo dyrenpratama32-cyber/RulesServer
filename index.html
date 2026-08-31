@@ -70,11 +70,12 @@
         }
 
         .message {
-            max-width: 80%;
+            max-width: 85%;
             padding: 0.8rem 1.2rem;
             border-radius: 12px;
-            line-height: 1.4;
+            line-height: 1.5;
             font-size: 0.95rem;
+            word-wrap: break-word;
         }
 
         .bot-message {
@@ -96,9 +97,10 @@
             background-color: #0f172a;
             display: flex;
             gap: 10px;
+            align-items: center;
         }
 
-        input[type="text"] {
+        textarea {
             flex: 1;
             padding: 0.8rem 1rem;
             border-radius: 8px;
@@ -106,9 +108,12 @@
             background-color: #1e293b;
             color: #fff;
             outline: none;
+            resize: none;
+            height: 48px;
+            font-size: 0.95rem;
         }
 
-        input[type="text"]:focus {
+        textarea:focus {
             border-color: #3b82f6;
         }
 
@@ -120,6 +125,7 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
+            height: 48px;
             transition: background 0.2s;
         }
 
@@ -165,30 +171,60 @@
 
             <div class="chat-messages" id="chatBox">
                 <div class="message bot-message">
-                    Halo! Saya AI Bot GHRP. Silakan tanyakan aturan server (Rules) seputar RDM, VDM, New Life Rule, MetaGaming, atau sistem Toko GHRP.
+                    Halo! Saya AI Bot GHRP. Silakan tanyakan aturan server seputar Rules Ramboing, RDM, VDM, NLR, MetaGaming, atau sistem Toko GHRP.
                 </div>
             </div>
 
             <div class="quick-questions">
+                <div class="chip" onclick="askQuick('Rules Ramboing')">📜 Rules Ramboing</div>
+                <div class="chip" onclick="askQuick('Batas Membawa Uang')">💵 Batas Uang</div>
                 <div class="chip" onclick="askQuick('Apa itu RDM?')">Apa itu RDM?</div>
                 <div class="chip" onclick="askQuick('Apa itu VDM?')">Apa itu VDM?</div>
                 <div class="chip" onclick="askQuick('Aturan New Life Rule (NLR)')">Aturan NLR</div>
-                <div class="chip" onclick="askQuick('Apa itu MetaGaming?')">MetaGaming</div>
             </div>
 
             <div class="chat-input-area">
-                <input type="text" id="userInput" placeholder="Tanyakan seputar rules server..." onkeypress="handleKeyPress(event)">
+                <textarea id="userInput" placeholder="Tanyakan seputar rules server... (Tekan Enter untuk kirim)" onkeydown="handleKeyDown(event)"></textarea>
                 <button onclick="sendMessage()">Kirim</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Database Rules Server GHRP
+        const ramboingRulesText = `Demi menjaga keseimbangan, keadilan, dan kualitas Roleplay, berikut adalah pembaruan <b>Rules Ramboing</b> yang WAJIB dipatuhi oleh seluruh pemain. ⚖️✨<br><br>
+📦 <b>Batas Maksimal Hasil Kerja:</b><br>
+📌 Tanpa Tas: Max 200<br>
+🎒 Menggunakan Tas: Max 250<br>
+<i>Berlaku untuk seluruh hasil pekerjaan seperti 🛢️ Minyak, 🪵 Kayu, ⛏️ Bahan Tambang (🥇 Emas, 🥈 Perak, ⚙️ Besi), 🧵 Hasil Jahit, serta seluruh hasil kerja lainnya.</i><br><br>
+🛠️ <b>Batas Maksimal Peralatan:</b><br>
+📱 HP : Max 5<br>
+🛹 Skate : Max 5<br>
+🎨 Pilox : Max 5<br>
+🧰 Toolkit : Max 5<br>
+⛽ Jerigen : Max 5<br>
+🍱 Paket Makanan : Max 10<br>
+🍔 Makanan : Max 20<br>
+🥤 Minuman : Max 20<br>
+🩹 Bandage : Max 10<br><br>
+💵 <b>Batas Maksimal Membawa Uang Hijau:</b><br>
+💸 Tanpa Koper: Max $100.000 di kantong.<br>
+🧳 Menggunakan Aksesoris Koper: Max $1.000.000.<br><br>
+⚠️ <b>Sanksi Pelanggaran:</b><br>
+🚔 Pemain yang terbukti melanggar Rules Ramboing atau membawa barang maupun uang melebihi batas yang telah ditentukan akan dikenakan sanksi berupa:<br>
+🔒 Jail 60 Menit<br>
+⚠️ +2 Warning<br><br>
+❗ <i>Tidak ada toleransi. Pastikan selalu memeriksa jumlah barang dan uang yang dibawa sebelum melakukan aktivitas Roleplay agar terhindar dari sanksi.</i><br><br>
+🙏 Terima kasih atas perhatian dan kerja samanya. Mari bersama-sama menjaga Nexotis Roleplay agar tetap realistis, adil, dan nyaman untuk seluruh pemain.`;
+
         const serverRules = {
+            "ramboing": ramboingRulesText,
+            "rambo": ramboingRulesText,
+            "tas": ramboingRulesText,
+            "peralatan": ramboingRulesText,
+            "uang": "<b>Batas Membawa Uang Hijau:</b><br>💸 Tanpa Koper: Max $100.000 di kantong.<br>🧳 Menggunakan Aksesoris Koper: Max $1.000.000.",
             "rdm": "<b>RDM (Random Deathmatch):</b> Membunuh atau menyerang pemain lain tanpa alasan Roleplay (RP) yang jelas dan valid.",
             "vdm": "<b>VDM (Vehicle Deathmatch):</b> Menggunakan kendaraan sebagai senjata untuk menabrak atau membunuh pemain lain tanpa alasan RP.",
-            "nlr": "<b>NLR (New Life Rule):</b> Jika karakter Anda "Lembaga/Pingsan/Mati" dan di-respawn di Rumah Sakit, Anda lupa akan kejadian sebelum mati dan tidak boleh kembali ke lokasi kejadian dalam kurun waktu tertentu.",
+            "nlr": "<b>NLR (New Life Rule):</b> Jika karakter Anda pingsan/mati dan di-respawn di Rumah Sakit, Anda lupa akan kejadian sebelum mati dan tidak boleh kembali ke lokasi kejadian dalam kurun waktu tertentu.",
             "metagaming": "<b>MetaGaming (MG):</b> Menggunakan informasi dari luar game (OOC/Discord/Livestream) untuk kepentingan dalam game (IC).",
             "powergaming": "<b>PowerGaming (PG):</b> Melakukan hal-hal yang tidak manusiawi atau tidak masuk akal secara realitas di dalam server RP.",
             "failrp": "<b>Fail RP:</b> Gagal melakukan roleplay sesuai standar atau keluar dari peran karakter secara sengaja.",
@@ -202,15 +238,13 @@
 
             if (message === '') return;
 
-            // Tampilkan pesan user
             appendMessage(message, 'user-message');
             input.value = '';
 
-            // Cari jawaban AI
             setTimeout(() => {
                 const botResponse = getBotResponse(message.toLowerCase());
                 appendMessage(botResponse, 'bot-message');
-            }, 400);
+            }, 300);
         }
 
         function askQuick(text) {
@@ -218,8 +252,9 @@
             sendMessage();
         }
 
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') {
+        function handleKeyDown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
                 sendMessage();
             }
         }
