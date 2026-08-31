@@ -135,74 +135,89 @@
             z-index: 2;
         }
 
-        /* --- ROBOT AVATAR --- */
-        .robot-avatar-lg {
+        /* --- BOT 01: CINEMATIC KNIGHT (KSATRIA) AVATAR --- */
+        .knight-avatar {
             width: 70px;
-            height: 70px;
+            height: 80px;
             position: relative;
             animation: float 3.5s ease-in-out infinite;
         }
 
-        .robot-head-lg {
-            width: 55px;
-            height: 42px;
-            background: #090d16;
-            border-radius: 8px;
+        /* Helm Ksatria */
+        .knight-helmet {
+            width: 44px;
+            height: 38px;
+            background: linear-gradient(135deg, #475569 0%, #1e293b 100%);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
             position: absolute;
-            bottom: 6px;
-            left: 7.5px;
-            border: 3px solid #d4af37;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            top: 10px;
+            left: 13px;
+            border: 2px solid #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
             transition: transform 0.2s;
         }
 
-        .robot-antenna-lg {
-            width: 4px;
-            height: 12px;
-            background: #d4af37;
-            position: absolute;
-            top: 4px;
-            left: 33px;
-        }
-
-        .robot-antenna-ball-lg {
+        /* Mahkota / Bulu Helm Ksatria */
+        .knight-crest {
             width: 12px;
-            height: 12px;
-            background: #f59e0b;
-            border-radius: 50%;
+            height: 18px;
+            background: linear-gradient(to top, #b45309, #f59e0b);
             position: absolute;
             top: -6px;
             left: 29px;
-            box-shadow: 0 0 12px #f59e0b;
-            animation: pulse 1.5s infinite alternate;
+            border-radius: 50% 50% 0 0;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
         }
 
-        .robot-eye-lg {
-            width: 9px;
-            height: 9px;
-            background-color: #f59e0b;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #f59e0b;
-            animation: blink 4s infinite;
+        /* Visor Helm Ksatria */
+        .knight-visor {
+            width: 32px;
+            height: 8px;
+            background: #090d16;
+            position: absolute;
+            top: 24px;
+            left: 19px;
+            border-radius: 4px;
+            border: 1px solid #d4af37;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 3px;
+            overflow: hidden;
+            z-index: 3;
         }
 
-        .speaking .robot-head-lg {
+        /* Mata Glowing Ksatria */
+        .knight-eye {
+            width: 8px;
+            height: 3px;
+            background-color: #38bdf8;
+            border-radius: 2px;
+            box-shadow: 0 0 8px #38bdf8;
+            animation: pulseKnightEyes 2s infinite alternate;
+        }
+
+        /* Armor Dada Ksatria */
+        .knight-gorget {
+            width: 36px;
+            height: 14px;
+            background: #334155;
+            position: absolute;
+            top: 45px;
+            left: 17px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            border: 1.5px solid #d4af37;
+        }
+
+        .speaking .knight-helmet {
             transform: scale(1.15);
         }
 
-        .robot-label {
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: #d4af37;
-            margin-bottom: 4px;
-            display: block;
-        }
-
-        /* --- SAMURAI CINEMATIC AVATAR --- */
+        /* --- BOT 02: SAMURAI CINEMATIC AVATAR --- */
         .samurai-avatar {
             width: 70px;
             height: 80px;
@@ -306,6 +321,14 @@
 
         .speaking .slash-effect {
             animation: slashAnim 0.8s ease-in-out infinite alternate;
+        }
+
+        .robot-label {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #d4af37;
+            margin-bottom: 4px;
+            display: block;
         }
 
         /* --- DIALOG BOX --- */
@@ -456,14 +479,9 @@
             100% { transform: translateY(0px); }
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.4; transform: scale(0.85); box-shadow: 0 0 4px #f59e0b; }
-            100% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 16px #f59e0b; }
-        }
-
-        @keyframes blink {
-            0%, 90%, 100% { transform: scaleY(1); }
-            95% { transform: scaleY(0.1); }
+        @keyframes pulseKnightEyes {
+            0% { opacity: 0.5; box-shadow: 0 0 4px #38bdf8; }
+            100% { opacity: 1; box-shadow: 0 0 12px #38bdf8; }
         }
 
         @keyframes pulseBtn {
@@ -517,19 +535,20 @@
         <button class="bgm-control" id="bgmBtn" onclick="toggleBGM()">🎵 BGM: ON</button>
     </header>
 
-    <!-- STAGE INTERAKSI -->
+    <!-- STAGE INTERAKSI (CYBER KNIGHT BOT 01 vs CYBER SAMURAI BOT 02) -->
     <div class="robot-stage">
-        <!-- Robot Alpha -->
+        <!-- Cinematic Knight (Bot 01) -->
         <div class="character-container" id="bot01Container">
-            <div class="robot-avatar-lg">
-                <div class="robot-antenna-ball-lg"></div>
-                <div class="robot-antenna-lg"></div>
-                <div class="robot-head-lg">
-                    <div class="robot-eye-lg"></div>
-                    <div class="robot-eye-lg"></div>
+            <div class="knight-avatar">
+                <div class="knight-crest"></div>
+                <div class="knight-helmet"></div>
+                <div class="knight-visor">
+                    <div class="knight-eye"></div>
+                    <div class="knight-eye"></div>
                 </div>
+                <div class="knight-gorget"></div>
             </div>
-            <span class="robot-label">DYREN BOT 01</span>
+            <span class="robot-label">CYBER KNIGHT</span>
         </div>
 
         <!-- Dynamic Dialog Box -->
@@ -585,7 +604,7 @@
         let bgmInterval = null;
         let isBgmPlaying = false;
 
-        // --- SISTEM PEMBUATAN LAGU JEPANG SAMURAI (Web Audio API) ---
+        // --- SISTEM PEMBUATAN LAGU JEPANG SAMURAI/KSATRIA TEMPO CEPAT & SEMANGAT (Web Audio API) ---
         function startSamuraiBGM() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -595,10 +614,13 @@
             }
             isBgmPlaying = true;
             
-            // Tangga Nada Hirajoshi (Skala Tradisional Samurai Jepang)
-            const hirajoshiFreqs = [220.00, 246.94, 261.63, 329.63, 349.23, 440.00, 493.88, 523.25, 659.25];
+            // Tangga nada Pentatonis Jepang / Yo Scale (Lebih energik, megah, dan bersemangat)
+            const semangatScale = [220.00, 246.94, 293.66, 329.63, 392.00, 440.00, 493.88, 587.33, 659.25, 783.99];
+            
+            // Melodi utama khas pertempuran
+            const melodyPattern = [0, 2, 3, 5, 4, 3, 2, 5, 7, 5, 4, 3, 2, 0];
 
-            function playNote(freq, duration, type = 'sine', volume = 0.08) {
+            function playNote(freq, duration, type = 'sawtooth', volume = 0.08) {
                 if (!isBgmPlaying) return;
                 try {
                     const osc = audioCtx.createOscillator();
@@ -607,6 +629,7 @@
                     osc.type = type;
                     osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
 
+                    // Fade in & Attack cepat untuk kesan semangat/tegas
                     gain.gain.setValueAtTime(volume, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
 
@@ -618,25 +641,57 @@
                 } catch(e) {}
             }
 
-            // Loop Melodi Tradisional Suling Shakuhachi & Biwa
+            // Simulasi Suara Taiko (Drum Perang Jepang)
+            function playTaiko(isHeavy = false) {
+                if (!isBgmPlaying) return;
+                try {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+
+                    osc.type = 'triangle';
+                    const startFreq = isHeavy ? 120 : 180;
+                    osc.frequency.setValueAtTime(startFreq, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + (isHeavy ? 0.35 : 0.15));
+
+                    gain.gain.setValueAtTime(isHeavy ? 0.4 : 0.25, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (isHeavy ? 0.35 : 0.15));
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + (isHeavy ? 0.35 : 0.15));
+                } catch(e) {}
+            }
+
             let step = 0;
+            // Tempo dinaikkan pesat (interval 180ms per ketukan / ~166 BPM)
             bgmInterval = setInterval(() => {
                 if (!isBgmPlaying) return;
-                
-                // Melodi Utama Suling
-                if (step % 2 === 0) {
-                    const randomNote = hirajoshiFreqs[Math.floor(Math.random() * hirajoshiFreqs.length)];
-                    playNote(randomNote, 1.8, 'sine', 0.06);
-                }
-                
-                // Aksensuara Petikan Biwa / Shamisen
+
+                // 1. Pola Drum Taiko (Rhythm Perang)
                 if (step % 4 === 0) {
-                    const lowNote = hirajoshiFreqs[Math.floor(Math.random() * 3)];
-                    playNote(lowNote / 2, 0.6, 'triangle', 0.12);
+                    playTaiko(true); // Dentuman berat di awal baris
+                } else if (step % 2 === 0) {
+                    playTaiko(false); // Ketukan drum cepat
+                } else if (step % 8 === 7) {
+                    playTaiko(false); // Ketukan ganda sebelum pergantian bar
+                }
+
+                // 2. Melodi Synth Shamisen/Shakuhachi Energik
+                const noteIdx = melodyPattern[step % melodyPattern.length];
+                const freq = semangatScale[noteIdx];
+                
+                // Melodi Lead
+                playNote(freq, 0.25, 'sawtooth', 0.07);
+                
+                // Bass Line Pembakar Semangat (1 oktav di bawah)
+                if (step % 2 === 0) {
+                    playNote(semangatScale[step % 4] / 2, 0.4, 'square', 0.05);
                 }
 
                 step++;
-            }, 800);
+            }, 180); 
         }
 
         function toggleBGM() {
@@ -651,13 +706,13 @@
             }
         }
 
-        // --- DIALOG SISTEM ROBOT & SAMURAI ---
+        // --- DIALOG SISTEM KSATRIA & SAMURAI ---
         const robotConversations = [
-            { bot: 1, text: "Bro, bagaimana aturan ramboing di kota atau server ini?" },
+            { bot: 1, text: "Ksatria, bagaimana aturan ramboing di kota atau server ini?" },
             { bot: 2, text: "Hasil kerja tanpa tas maksimal 200, kalau pakai tas bisa membawa sampai 250." },
             { bot: 1, text: "Kalau membawa uang di kantong berapa batas maksimalnya?" },
             { bot: 2, text: "Tanpa koper maksimal 100 ribu, kalau pakai koper bisa 1 juta rupiah!" },
-            { bot: 1, text: "Sanksinya kalau melanggar apa bro?" },
+            { bot: 1, text: "Sanksinya kalau melanggar apa, kawan?" },
             { bot: 2, text: "Bisa kena Jail 60 menit dan 2 Warning tanpa toleransi!" },
             { bot: 1, text: "Siap, wajib mematuhi rules demi keadilan roleplay!" }
         ];
@@ -667,7 +722,7 @@
 
             const currentTalk = robotConversations[index];
             const talkBox = document.getElementById('robotTalk');
-            const botName = currentTalk.bot === 1 ? "DYREN BOT 01" : "CYBER SAMURAI";
+            const botName = currentTalk.bot === 1 ? "CYBER KNIGHT" : "CYBER SAMURAI";
             
             talkBox.style.animation = 'none';
             talkBox.offsetHeight;
@@ -683,9 +738,9 @@
             utterance.rate = 0.95;
 
             if (currentTalk.bot === 1) {
-                utterance.pitch = 0.85;
+                utterance.pitch = 0.85; // Suara Ksatria yang berat
             } else {
-                utterance.pitch = 1.35;
+                utterance.pitch = 1.35; // Suara Samurai
             }
 
             const talkBot = currentTalk.bot === 1 ? document.getElementById('bot01Container') : document.getElementById('bot02Container');
