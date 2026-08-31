@@ -3,10 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Neon Wallpaper - GHIRP</title>
+    <title>DYREN & DZOE - GHIRP Cyber Neural AI</title>
     <style>
         :root {
             --bg-color: #030712;
+            --panel-bg: rgba(15, 23, 42, 0.88);
+            --border-glow: rgba(0, 243, 255, 0.4);
+            --neon-cyan: #00f3ff;
+            --neon-purple: #bd00ff;
+            --neon-red: #ff0055;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
         }
 
         * {
@@ -19,110 +26,627 @@
             font-family: 'Courier New', Courier, monospace;
             background-color: var(--bg-color);
             background-image: 
-                radial-gradient(circle at 20% 30%, rgba(189, 0, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(0, 243, 255, 0.15) 0%, transparent 50%);
+                radial-gradient(circle at 10% 20%, rgba(189, 0, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.15) 0%, transparent 40%);
+            color: var(--text-main);
             height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             overflow: hidden;
             position: relative;
         }
 
-        /* Efek Grid Cyber Background */
-        body::before {
-            content: "";
+        /* Teks STUDIO Menyala Cyber di Kiri-Tengah Atas */
+        .studio-neon-title {
             position: absolute;
-            width: 200%;
-            height: 200%;
-            background-image: linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: gridMove 20s linear infinite;
-            z-index: 1;
-        }
-
-        @keyframes gridMove {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(40px); }
-        }
-
-        /* Container Teks Cyber Berubah Warna */
-        .cyber-wallpaper-container {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .cyber-text {
-            font-size: clamp(28px, 6vw, 64px);
+            top: 15px;
+            left: 30px;
+            font-size: clamp(14px, 2.5vw, 18px);
             font-weight: bold;
-            letter-spacing: 8px;
+            letter-spacing: 6px;
+            animation: cyberColorShift 6s infinite alternate ease-in-out;
             text-transform: uppercase;
-            animation: cyberColorShift 5s infinite alternate ease-in-out, textFloat 3s infinite ease-in-out alternate;
-        }
-
-        .cyber-text.secondary {
-            font-size: clamp(14px, 3vw, 24px);
-            letter-spacing: 12px;
-            animation: cyberColorShiftReverse 6s infinite alternate ease-in-out, textFloat 4s infinite ease-in-out alternate-reverse;
-            opacity: 0.85;
+            z-index: 10;
         }
 
         @keyframes cyberColorShift {
             0% { 
                 color: #00f3ff; 
-                text-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff, 0 0 40px #00f3ff, 0 0 80px #00f3ff; 
+                text-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff; 
             }
             33% { 
                 color: #bd00ff; 
-                text-shadow: 0 0 10px #bd00ff, 0 0 20px #bd00ff, 0 0 40px #bd00ff, 0 0 80px #bd00ff; 
+                text-shadow: 0 0 10px #bd00ff, 0 0 20px #bd00ff; 
             }
             66% { 
                 color: #ff0055; 
-                text-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055, 0 0 40px #ff0055, 0 0 80px #ff0055; 
+                text-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055; 
             }
             100% { 
                 color: #00ff66; 
-                text-shadow: 0 0 10px #00ff66, 0 0 20px #00ff66, 0 0 40px #00ff66, 0 0 80px #00ff66; 
+                text-shadow: 0 0 10px #00ff66, 0 0 20px #00ff66; 
             }
         }
 
-        @keyframes cyberColorShiftReverse {
-            0% { 
-                color: #00ff66; 
-                text-shadow: 0 0 8px #00ff66, 0 0 16px #00ff66, 0 0 30px #00ff66; 
-            }
-            33% { 
-                color: #ff0055; 
-                text-shadow: 0 0 8px #ff0055, 0 0 16px #ff0055, 0 0 30px #ff0055; 
-            }
-            66% { 
-                color: #bd00ff; 
-                text-shadow: 0 0 8px #bd00ff, 0 0 16px #bd00ff, 0 0 30px #bd00ff; 
-            }
-            100% { 
-                color: #00f3ff; 
-                text-shadow: 0 0 8px #00f3ff, 0 0 16px #00f3ff, 0 0 30px #00f3ff; 
-            }
+        /* Emoji Cyber Bergerak Memegang Katana di Kanan Atas */
+        .cyber-emoji-container {
+            position: absolute;
+            top: 15px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--neon-cyan);
+            padding: 6px 12px;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            z-index: 10;
+            animation: containerFloat 3s infinite ease-in-out alternate;
         }
 
-        @keyframes textFloat {
-            0% { transform: translateY(0) scale(1); filter: brightness(1); }
-            100% { transform: translateY(-8px) scale(1.02); filter: brightness(1.2); }
+        @keyframes containerFloat {
+            0% { transform: translateY(0); box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); }
+            100% { transform: translateY(-4px); box-shadow: 0 0 20px rgba(189, 0, 255, 0.4); }
+        }
+
+        .cyber-bot-emoji {
+            font-size: 22px;
+            display: inline-block;
+            animation: eyeBlinkAndLook 4s infinite ease-in-out;
+        }
+
+        @keyframes eyeBlinkAndLook {
+            0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 5px var(--neon-cyan)); }
+            25% { transform: scale(1.08) rotate(-5deg); filter: drop-shadow(0 0 8px var(--neon-purple)); }
+            50% { transform: scale(0.95) rotate(5deg); filter: drop-shadow(0 0 5px var(--neon-cyan)); }
+            75% { transform: scale(1.05) rotate(0deg); filter: drop-shadow(0 0 10px #ff0055); }
+        }
+
+        .cyber-katana-emoji {
+            font-size: 20px;
+            display: inline-block;
+            animation: katanaAction 1.5s infinite alternate ease-in-out;
+            transform-origin: bottom left;
+        }
+
+        @keyframes katanaAction {
+            0% { transform: rotate(-15deg) translateY(0); filter: drop-shadow(0 0 4px #00f3ff); }
+            100% { transform: rotate(15deg) translateY(-2px) scale(1.1); filter: drop-shadow(0 0 10px #ff0055); }
+        }
+
+        /* Cinematic Intro Overlay */
+        #cinematicIntro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #030712;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            animation: fadeOutIntro 1s ease 4.5s forwards;
+            pointer-events: none;
+        }
+
+        .cinematic-title {
+            font-size: clamp(20px, 4vw, 32px);
+            font-weight: bold;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 15px var(--neon-cyan), 0 0 30px var(--neon-purple);
+            letter-spacing: 3px;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: textIn 1.5s ease 0.5s forwards, pulseGlow 2s infinite alternate 2s;
+        }
+
+        .cinematic-subtitle {
+            font-size: clamp(12px, 2vw, 16px);
+            color: var(--text-muted);
+            margin-top: 15px;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: textIn 1.5s ease 1.8s forwards;
+        }
+
+        .cinematic-line {
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            margin-top: 20px;
+            animation: expandLine 1.5s ease 2.5s forwards;
+        }
+
+        @keyframes textIn {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes expandLine {
+            to { width: 250px; }
+        }
+
+        @keyframes fadeOutIntro {
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        @keyframes pulseGlow {
+            from { text-shadow: 0 0 10px var(--neon-cyan); }
+            to { text-shadow: 0 0 25px var(--neon-cyan), 0 0 40px var(--neon-purple); }
+        }
+
+        /* Main Cyber Container */
+        .cyber-container {
+            width: 100%;
+            max-width: 540px;
+            height: 88vh;
+            max-height: 760px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glow);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.15), inset 0 0 15px rgba(0, 243, 255, 0.05);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            margin-top: 35px;
+            opacity: 0;
+            animation: fadeInMain 1s ease 4.8s forwards;
+        }
+
+        @keyframes fadeInMain {
+            to { opacity: 1; }
+        }
+
+        /* Header Cyber */
+        .cyber-header {
+            background: linear-gradient(90deg, rgba(0,243,255,0.1), rgba(189,0,255,0.1));
+            border-bottom: 1px solid var(--border-glow);
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .bot-profiles {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .bot-avatar-container {
+            position: relative;
+            width: 44px;
+            height: 44px;
+        }
+
+        .bot-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #1e293b;
+            border: 2px solid var(--neon-cyan);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan);
+            animation: botPulse 2s infinite alternate;
+            position: relative;
+            z-index: 2;
+        }
+
+        .bot-avatar.dzoe {
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+            box-shadow: 0 0 10px var(--neon-purple);
+        }
+
+        @keyframes botPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.03); }
+        }
+
+        .bot-info h1 {
+            font-size: 14px;
+            letter-spacing: 1px;
+            color: var(--text-main);
+        }
+
+        .bot-status {
+            font-size: 11px;
+            color: var(--neon-cyan);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background-color: var(--neon-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--neon-cyan);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Quick Buttons for Rules & Fun */
+        .quick-actions {
+            display: flex;
+            gap: 6px;
+            padding: 8px 12px;
+            background: rgba(3, 7, 18, 0.6);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.15);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .quick-btn {
+            background: rgba(0, 243, 255, 0.08);
+            border: 1px solid var(--border-glow);
+            color: var(--neon-cyan);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-btn:hover {
+            background: rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+        }
+
+        /* Area Pesan Chat */
+        .chat-messages {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.ai-dyren {
+            background: rgba(0, 243, 255, 0.08);
+            border-left: 3px solid var(--neon-cyan);
+            color: var(--text-main);
+            align-self: flex-start;
+        }
+
+        .message.ai-dzoe {
+            background: rgba(189, 0, 255, 0.08);
+            border-left: 3px solid var(--neon-purple);
+            color: var(--text-main);
+            align-self: flex-start;
+        }
+
+        .message.user {
+            background: rgba(255, 255, 255, 0.05);
+            border-right: 3px solid var(--text-muted);
+            color: var(--text-main);
+            align-self: flex-end;
+            text-align: right;
+        }
+
+        .sender-tag {
+            font-size: 10px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            display: block;
+            letter-spacing: 0.5px;
+        }
+
+        .ai-dyren .sender-tag { color: var(--neon-cyan); }
+        .ai-dzoe .sender-tag { color: var(--neon-purple); }
+
+        /* Area Input */
+        .cyber-input-area {
+            padding: 15px;
+            background: rgba(3, 7, 18, 0.9);
+            border-top: 1px solid var(--border-glow);
+            display: flex;
+            gap: 10px;
+        }
+
+        .cyber-input-area input {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border-glow);
+            padding: 12px 16px;
+            border-radius: 6px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .cyber-input-area input:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+        }
+
+        .cyber-btn {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            color: #030712;
+            border: none;
+            padding: 0 20px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        .cyber-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* Indikator Sedang Mengetik */
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 14px;
+            background: rgba(0, 243, 255, 0.05);
+            border-left: 3px solid var(--neon-cyan);
+            border-radius: 8px;
+            width: fit-content;
+            align-self: flex-start;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--neon-cyan);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="cyber-wallpaper-container">
-        <div class="cyber-text">STUDIO</div>
-        <div class="cyber-text secondary">GHIRP CYBERPUNK</div>
+    <!-- Cinematic Intro GHIRP Server -->
+    <div id="cinematicIntro">
+        <div class="cinematic-title">SELAMAT DATANG DI SERVER GHIRP</div>
+        <div class="cinematic-line"></div>
+        <div class="cinematic-subtitle">INITIALIZING NEURAL LINK: DYREN & DZOE // KATANA PROTOCOL</div>
     </div>
 
+    <!-- Teks STUDIO Menyala Cyber di Kiri-Tengah Atas -->
+    <div class="studio-neon-title">STUDIO</div>
+
+    <!-- Emoji Cyber Bergerak Memegang Katana di Kanan Atas -->
+    <div class="cyber-emoji-container">
+        <span class="cyber-bot-emoji">🤖⚡</span>
+        <span class="cyber-katana-emoji">⚔️</span>
+    </div>
+
+    <div class="cyber-container">
+        <!-- Header -->
+        <div class="cyber-header">
+            <div class="bot-profiles">
+                <div class="bot-avatar-container">
+                    <div class="bot-avatar" id="activeAvatar">DY</div>
+                </div>
+                <div class="bot-info">
+                    <h1 id="activeBotName">DYREN & DZOE</h1>
+                    <div class="bot-status">
+                        <span class="status-dot"></span>
+                        <span id="statusText">GHIRP Neural Core Online</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Rules & Fun Menu -->
+        <div class="quick-actions">
+            <button class="quick-btn" onclick="sendQuickQuery('hasil kerja')">📦 Batas Kerja</button>
+            <button class="quick-btn" onclick="sendQuickQuery('peralatan')">🛠️ Batas Alat</button>
+            <button class="quick-btn" onclick="sendQuickQuery('uang')">💵 Batas Uang</button>
+            <button class="quick-btn" onclick="sendQuickQuery('sanksi')">⚠️ Sanksi</button>
+            <button class="quick-btn" onclick="sendQuickQuery('tips')">💡 Tips RP</button>
+            <button class="quick-btn" onclick="sendQuickQuery('cerita')">📜 Lore Kota</button>
+            <button class="quick-btn" onclick="sendQuickQuery('rahasia')">🔮 Kode Rahasia</button>
+        </div>
+
+        <!-- Chat Log -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-dyren">
+                <span class="sender-tag">DYREN [CORE AI]</span>
+                Selamat datang kembali di pusat database server **GHIRP**! Database telah diperbarui dengan puluhan topik interaktif baru, tips roleplay, lore kota, hingga rahasia katana. Silakan pilih tombol pintasan di atas atau ketik apa saja untuk mulai mengobrol!
+            </div>
+        </div>
+
+        <!-- Indikator Ketik -->
+        <div class="chat-messages" style="padding-top: 0; padding-bottom: 0;">
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="cyber-input-area">
+            <input type="text" id="userInput" placeholder="Tanya soal rules, tips, atau ngobrol santai..." onkeypress="handleKeyPress(event)">
+            <button class="cyber-btn" onclick="sendMessage()">KIRIM</button>
+        </div>
+    </div>
+
+    <script>
+        let turnCounter = 0;
+
+        function appendMessage(senderClass, senderName, text) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', senderClass);
+            
+            const tagSpan = document.createElement('span');
+            tagSpan.classList.add('sender-tag');
+            tagSpan.textContent = senderName;
+            
+            messageDiv.appendChild(tagSpan);
+            const textFormatted = text.replace(/\n/g, '<br>');
+            const contentSpan = document.createElement('div');
+            contentSpan.innerHTML = textFormatted;
+            messageDiv.appendChild(contentSpan);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTyping(show) {
+            document.getElementById('typingIndicator').style.display = show ? 'flex' : 'none';
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function getAIResponse(input) {
+            input = input.toLowerCase();
+            turnCounter++;
+
+            let isDzoe = turnCounter % 2 === 0;
+            let botKey = isDzoe ? 'ai-dzoe' : 'ai-dyren';
+            let botName = isDzoe ? 'DZOE [SUB-AI]' : 'DYREN [CORE AI]';
+
+            const avatarEl = document.getElementById('activeAvatar');
+            const nameEl = document.getElementById('activeBotName');
+
+            if (isDzoe) {
+                avatarEl.className = 'bot-avatar dzoe';
+                avatarEl.textContent = 'DZ';
+                nameEl.textContent = 'DZOE (Katana Ready)';
+            } else {
+                avatarEl.className = 'bot-avatar';
+                avatarEl.textContent = 'DY';
+                nameEl.textContent = 'DYREN (Katana Ready)';
+            }
+
+            let responseText = "";
+
+            if (input.includes('hasil kerja') || input.includes('tas') || input.includes('minyak') || input.includes('kayu') || input.includes('tambang') || input.includes('emas')) {
+                responseText = "📦 **Batas Maksimal Hasil Kerja (GHIRP Server):**\n• Tanpa Tas: Max 200 unit.\n• Menggunakan Aksesoris Tas: Max 250 unit.\n(Berlaku untuk semua jenis pekerjaan legal seperti Minyak, Kayu, Tambang, Jahit, dll). Jangan sampai overload ya!";
+            } else if (input.includes('peralatan') || input.includes('alat') || input.includes('hp') || input.includes('skate') || input.includes('toolkit') || input.includes('makanan') || input.includes('bandage')) {
+                responseText = "🛠️ **Batas Maksimal Membawa Peralatan:**\n• HP, Skate, Pilox, Toolkit, Jerigen: Max 5\n• Paket Makanan: Max 10\n• Makanan & Minuman biasa: Max 20\n• Bandage / Obat Luka: Max 10\nSelalu cek inventory sebelum patroli atau kerja!";
+            } else if (input.includes('uang') || input.includes('koper') || input.includes('hijau') || input.includes('dolar')) {
+                responseText = "💵 **Batas Maksimal Membawa Uang Hijau:**\n• Tanpa Koper: Max $100.000 di kantong.\n• Menggunakan Aksesoris Koper: Max $1.000.000.\nSimpan sisanya di bank kota agar aman dari perampokan jalanan.";
+            } else if (input.includes('sanksi') || input.includes('hukuman') || input.includes('jail') || input.includes('warning') || input.includes('pelanggaran')) {
+                responseText = "⚠️ **Sanksi Pelanggaran Rules GHIRP:**\n• Hukuman Jail Admin: 60 Menit.\n• Penambahan Sanksi: +2 Warning.\nAdmin menerapkan zero-tolerance untuk pelanggaran berat seperti FailRP, RDM, atau PG!";
+            } else if (input.includes('rules') || input.includes('ghirp')) {
+                responseText = "⚖️ **Ringkasan Rules GHIRP:**\n1. Patuhi batas hasil kerja (200-250).\n2. Patuhi batas kapasitas barang/alat.\n3. Jaga batas uang cash ($100k/$1M).\n4. Hormati player lain & hindari toxic.";
+            } else if (input.includes('tips') || input.includes('pro') || input.includes('pintar')) {
+                responseText = "💡 **Tips Pro Player di GHIRP:**\n• Selalu bangun karakter (Character Development) yang unik agar interaksimu dengan player lain berkesan.\n• Jangan mudah emosi (OOC Emotion) saat terkena rob atau kalah RP.\n• Gunakan fitur /do dan /me secara kreatif untuk memperjelas aksi RP-mu.";
+            } else if (input.includes('cerita') || input.includes('lore') || input.includes('sejarah') || input.includes('kota')) {
+                responseText = "📜 **Lore Singkat GHIRP:**\nKota ini dulunya adalah zona riset teknologi siber terbengkalai yang dibangun kembali oleh para perintis independen. Kini, GHIRP menjadi pusat neon, sindikat legal, dan arena uji ketahanan mental bagi para pendatang baru.";
+            } else if (input.includes('rahasia') || input.includes('kode') || input.includes('easter egg')) {
+                responseText = "🔮 **Informasi Rahasia Sistem:**\nKonon, jika kamu mengetik kata 'katana' atau 'cyber' berulang kali, bilah energi di server akan merespons dengan frekuensi warna maksimal. Tetaplah aktif mengeksplorasi web ini!";
+            } else if (input.includes('halo') || input.includes('hai') || input.includes('pagi') || input.includes('siang') || input.includes('sore') || input.includes('malam')) {
+                responseText = isDzoe ? "Hai juga! Pedang Katana siap siaga mendampingi harimu. Mau bahas rules kota atau cari tips seru hari ini?" : "Halo kawan! Sistem neural stabil dan siap siaga. Ada hal menarik yang ingin kamu diskusikan seputar GHIRP?";
+            } else if (input.includes('sehat') || input.includes('baik') || input.includes('alhamdulillah')) {
+                responseText = "Syukur jika kondisi biologismu prima! Pertahankan energi tempurmu dan jangan lupa istirahat di sela-sela sesi gaming.";
+            } else if (input.includes('sakit') || input.includes('capek') || input.includes('lelah')) {
+                responseText = "Peringatan sistem: Segera minum air putih dan istirahat sejenak agar kesehatan fisik tetap terjaga di dunia nyata!";
+            } else if (input.includes('terima kasih') || input.includes('makasih')) {
+                responseText = "Sama-sama! Senang bisa membantu kelancaran aktivitasmu di server GHIRP. Silakan tanyakan hal lain kapan saja.";
+            } else if (input.includes('dadah') || input.includes('bye')) {
+                responseText = "Menutup sesi interaksi sementara. Tetap waspada di jalanan kota dan patuhi rules GHIRP ya!";
+            } else if (input.includes('siapa kamu') || input.includes('nama') || input.includes('pembuat')) {
+                responseText = "Kami adalah DYREN & DZOE, AI kembar bersistem siber yang ditugaskan mengawasi dan memandu para warga di database server GHIRP.";
+            } else if (input.includes('bosen') || input.includes('gabut')) {
+                responseText = "Gabut? Coba cek tombol pintasan **Lore Kota** atau **Tips RP** di atas, atau ajak kami berdiskusi tentang strategi bisnis legal di dalam game!";
+            } else {
+                responseText = "Analisis data diterima: \"" + input + "\". Pertanyaan yang menarik! Coba gunakan tombol pintasan di atas atau tanyakan hal lain seputar dunia Roleplay GHIRP.";
+            }
+
+            return { class: botKey, name: botName, text: responseText };
+        }
+
+        function sendQuickQuery(queryType) {
+            let userText = "";
+            if (queryType === 'hasil kerja') userText = "Berapa batas maksimal hasil kerja?";
+            else if (queryType === 'peralatan') userText = "Apa batas maksimal peralatan?";
+            else if (queryType === 'uang') userText = "Berapa batas maksimal bawa uang hijau?";
+            else if (queryType === 'sanksi') userText = "Apa sanksi pelanggaran rules?";
+            else if (queryType === 'tips') userText = "Berikan tips pro player roleplay!";
+            else if (queryType === 'cerita') userText = "Ceritakan lore singkat kota GHIRP.";
+            else if (queryType === 'rahasia') userText = "Apa kode rahasia sistem siber?";
+
+            appendMessage('user', 'YOU [USER]', userText);
+            showTyping(true);
+
+            setTimeout(() => {
+                showTyping(false);
+                const aiReply = getAIResponse(userText);
+                appendMessage(aiReply.class, aiReply.name, aiReply.text);
+            }, 700);
+        }
+
+        function sendMessage() {
+            const inputField = document.getElementById('userInput');
+            const text = inputField.value.trim();
+            if (text === "") return;
+
+            appendMessage('user', 'YOU [USER]', text);
+            inputField.value = "";
+
+            showTyping(true);
+
+            setTimeout(() => {
+                showTyping(false);
+                const aiReply = getAIResponse(text);
+                appendMessage(aiReply.class, aiReply.name, aiReply.text);
+            }, 800);
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
 </body>
 </html>
