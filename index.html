@@ -3,380 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>San Andreas Server - Rules & AI Assistant</title>
+    <title>Rules Kota - AI Assistant</title>
     <style>
-        * {
-            box-sizing: border-box;
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 0;
         }
-        body, html {
+        .chat-container {
             width: 100%;
-            height: 100%;
+            max-width: 500px;
+            background: #1e293b;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
-            font-family: 'Courier New', Courier, monospace;
-            color: #ffffff;
-            background-color: #0b0b0b;
+            border: 1px solid #334155;
         }
-
-        /* Latar Belakang Sinematik dengan Animasi Ken Burns */
-        .cinematic-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(18,18,18,0.85)), 
-                        url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1920&auto=format&fit=crop') no-repeat center center;
-            background-size: cover;
-            animation: cinematicZoom 20s infinite alternate ease-in-out;
-            z-index: -1;
-        }
-
-        @keyframes cinematicZoom {
-            0% { transform: scale(1) translate(0, 0); }
-            100% { transform: scale(1.15) translate(-10px, -10px); }
-        }
-
-        .vignette {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            box-shadow: inset 0 0 150px rgba(0,0,0,0.9);
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 750px;
-            margin: 2vh auto;
-            background: rgba(18, 18, 18, 0.9);
-            backdrop-filter: blur(8px);
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #333;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            max-height: 96vh;
-            overflow-y: auto;
-        }
-
-        h1 {
-            color: #f39c12;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+        .chat-header {
+            background: #0284c7;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
             text-align: center;
-            margin-bottom: 5px;
-            font-size: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #aaa;
-            font-size: 11px;
-            margin-bottom: 12px;
-            text-transform: uppercase;
+            font-size: 16px;
             letter-spacing: 1px;
         }
-
-        .rules-section {
-            text-align: left;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 10px 15px;
-            border-radius: 6px;
-            border-left: 4px solid #f39c12;
-            margin-bottom: 10px;
-        }
-
-        .rules-section h3 {
-            color: #f39c12;
-            margin-bottom: 4px;
-            font-size: 13px;
-        }
-
-        .rules-section ul {
-            padding-left: 18px;
-            font-size: 11px;
-            line-height: 1.4;
-            color: #ddd;
-        }
-
-        /* Kotak Chatbot AI Samurai / Rules */
-        .ai-chat-box {
-            background: rgba(0, 0, 0, 0.65);
-            border: 1px solid #444;
-            border-radius: 6px;
-            padding: 10px;
-            margin-top: 10px;
-        }
-
-        .ai-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 6px;
-        }
-
-        .bot-avatar {
-            width: 35px;
-            height: 35px;
-            background: #f39c12;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #121212;
-            font-size: 16px;
-            border: 1px solid #fff;
-        }
-
-        .ai-chat-box h3 {
-            color: #f39c12;
-            font-size: 13px;
-            text-transform: uppercase;
-            margin: 0;
-        }
-
-        #chatLog {
-            height: 85px;
+        .chat-messages {
+            height: 350px;
             overflow-y: auto;
-            background: rgba(15, 15, 15, 0.85);
-            padding: 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            margin-bottom: 8px;
-            color: #ccc;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message {
+            padding: 10px 14px;
+            border-radius: 8px;
+            max-width: 80%;
+            font-size: 14px;
             line-height: 1.4;
         }
-
+        .bot-message {
+            background: #334155;
+            color: #f1f5f9;
+            align-self: flex-start;
+            border-left: 4px solid #38bdf8;
+        }
+        .user-message {
+            background: #0284c7;
+            color: white;
+            align-self: flex-end;
+        }
         .chat-input-area {
             display: flex;
-            gap: 6px;
+            padding: 12px;
+            background: #0f172a;
+            border-top: 1px solid #334155;
         }
-
         input[type="text"] {
             flex: 1;
-            background: #222;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 7px;
-            border-radius: 4px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 11px;
-        }
-
-        input[type="text"]:focus {
+            padding: 10px;
+            border: 1px solid #475569;
+            background: #1e293b;
+            color: white;
+            border-radius: 6px;
             outline: none;
-            border-color: #f39c12;
+            font-size: 14px;
         }
-
-        .control-panel {
-            text-align: center;
-            margin-top: 10px;
-            border-top: 1px solid #333;
-            padding-top: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        input[type="text"]:focus {
+            border-color: #38bdf8;
         }
-
         button {
-            background-color: #f39c12;
-            color: #121212;
+            background: #0284c7;
+            color: white;
             border: none;
-            padding: 7px 14px;
-            font-size: 12px;
-            font-weight: bold;
+            padding: 10px 18px;
+            margin-left: 8px;
+            border-radius: 6px;
             cursor: pointer;
-            border-radius: 4px;
-            transition: 0.3s;
-            text-transform: uppercase;
+            font-weight: bold;
+            transition: 0.2s;
         }
-
         button:hover {
-            background-color: #d68910;
-        }
-
-        #status {
-            font-size: 11px;
-            color: #888;
+            background: #0369a1;
         }
     </style>
 </head>
 <body>
 
-    <div class="cinematic-bg"></div>
-    <div class="vignette"></div>
-
-    <div class="container">
-        <h1>San Andreas Rules Server</h1>
-        <div class="subtitle">Official Roleplay Server Guidelines & AI Assistant</div>
-
-        <div class="rules-section">
-            <h3>1. Aturan Dasar (General Rules)</h3>
-            <ul>
-                <li>Dilarang melakukan DM (Deathmatch) atau menyerang player lain tanpa alasan jelas.</li>
-                <li>Hargai semua player dan admin yang bertugas di dalam game.</li>
-                <li>Gunakan bahasa yang sopan di global chat (`/o`).</li>
-            </ul>
+    <div class="chat-container">
+        <div class="chat-header">BOT RULES KOTA ROLEPLAY</div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">Halo warga baru! Silakan tanyakan apa saja seputar rules atau peraturan kota kita di sini (Contoh: "Apa itu DM?", "Berapa minimal rob?").</div>
         </div>
-
-        <div class="rules-section">
-            <h3>2. Aturan Perampokan & Geng (Gang Rules)</h3>
-            <ul>
-                <li>Minimal anggota geng yang aktif melakukan rob adalah 3 orang.</li>
-                <li>Dilarang melakukan safezone camping di area bank atau hospital.</li>
-            </ul>
-        </div>
-
-        <!-- FITUR AI CHATBOT / SAMURAI BOT -->
-        <div class="ai-chat-box">
-            <div class="ai-header">
-                <div class="bot-avatar">⚔️</div>
-                <div>
-                    <h3>Samurai AI - Rules Assistant</h3>
-                    <div style="font-size: 10px; color: #888;">Tanya seputar rules server di sini</div>
-                </div>
-            </div>
-            <div id="chatLog"><strong>Samurai Bot:</strong> Ossu! Ada yang ingin ditanyakan mengenai rules server ini, kawan?</div>
-            <div class="chat-input-area">
-                <input type="text" id="userInput" placeholder="Contoh: apa boleh DM?" onkeypress="handleKey(event)">
-                <button onclick="askAI()">Kirim</button>
-            </div>
-        </div>
-
-        <div class="control-panel">
-            <div>
-                <button id="playBtn" onclick="toggleMusic()">Putar Musik G-Funk</button>
-            </div>
-            <div id="status">Status: Musik Berhenti</div>
+        <div class="chat-input-area">
+            <input type="text" id="userInput" placeholder="Ketik pertanyaan rules..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Kirim</button>
         </div>
     </div>
 
     <script>
-        // Logika Chatbot AI Rules (Ubah teks/jawaban bot di bagian ini sesuai keinginan Anda)
-        function askAI() {
+        function sendMessage() {
             const inputField = document.getElementById('userInput');
-            const chatLog = document.getElementById('chatLog');
-            const query = inputField.value.trim().toLowerCase();
+            const chatMessages = document.getElementById('chatMessages');
+            const text = inputField.value.trim();
 
-            if (!query) return;
+            if (text === '') return;
 
-            chatLog.innerHTML += `<br><span style="color:#f39c12;">Player:</span> ${inputField.value}`;
+            // Tampilkan pesan user
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'message user-message';
+            userMsgDiv.textContent = text;
+            chatMessages.appendChild(userMsgDiv);
+
             inputField.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // LOGIKA JAWABAN BOT (Bisa diubah/ditambah teksnya di sini)
-            let answer = "Maaf kawan, saya kurang paham pertanyaan itu. Coba baca aturan di atas atau tanyakan ke admin!";
-            
-            if (query.includes('dm') || query.includes('deathmatch') || query.includes('menyerang')) {
-                answer = "Aturan Dasar: Dilarang keras melakukan DM (Deathmatch) atau menyerang player lain tanpa alasan roleplay yang jelas!";
-            } else if (query.includes('rob') || query.includes('geng') || query.includes('perampokan') || query.includes('rampok')) {
-                answer = "Aturan Geng: Minimal anggota geng yang aktif melakukan rob/perampokan adalah 3 orang, dan dilarang safezone camping di bank/hospital.";
-            } else if (query.includes('admin') || query.includes('player') || query.includes('sopan')) {
-                answer = "Aturan Dasar: Kamu wajib menghargai semua player dan admin yang bertugas, serta menggunakan bahasa sopan di global chat.";
-            } else if (query.includes('safezone') || query.includes('bank') || query.includes('hospital')) {
-                answer = "Aturan Safezone: Area sekitar bank dan hospital adalah safezone, dilarang melakukan aksi kriminal di sana.";
-            } else if (query.includes('halo') || query.includes('hi') || query.includes('p') || query.includes('osu')) {
-                answer = "Ossu! Ada yang bisa dibantu seputar aturan San Andreas server kita?";
-            }
-
+            // Respon otomatis bot berdasarkan kata kunci rules
             setTimeout(() => {
-                chatLog.innerHTML += `<br><span style="color:#2ecc71;">Samurai Bot:</span> ${answer}`;
-                chatLog.scrollTop = chatLog.scrollHeight;
-            }, 300);
+                const botMsgDiv = document.createElement('div');
+                botMsgDiv.className = 'message bot-message';
+                botMsgDiv.textContent = getBotResponse(text.toLowerCase());
+                chatMessages.appendChild(botMsgDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 400);
         }
 
-        function handleKey(e) {
-            if (e.key === 'Enter') {
-                askAI();
-            }
-        }
-
-        // Logika Pemutar Musik G-Funk (Web Audio API)
-        let audioCtx = null;
-        let isPlaying = false;
-        let timerId = null;
-
-        const bassNotes = [110, 110, 123.47, 130.81, 110, 98.00, 87.31, 98.00];
-        const synthNotes = [440, 493.88, 523.25, 587.33, 523.25, 493.88, 440, 392.00];
-        let step = 0;
-
-        function startMusic() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-
-            isPlaying = true;
-            document.getElementById('playBtn').innerText = 'Matikan Musik';
-            document.getElementById('status').innerText = 'Status: Memutar G-Funk...';
-
-            timerId = setInterval(() => {
-                playGangstaBeat(audioCtx, bassNotes[step % bassNotes.length], synthNotes[step % synthNotes.length]);
-                step++;
-            }, 300);
-        }
-
-        function stopMusic() {
-            isPlaying = false;
-            clearInterval(timerId);
-            document.getElementById('playBtn').innerText = 'Putar Musik G-Funk';
-            document.getElementById('status').innerText = 'Status: Musik Berhenti';
-        }
-
-        function toggleMusic() {
-            if (isPlaying) {
-                stopMusic();
+        function getBotResponse(query) {
+            // Ubah atau tambah aturan kota Anda di bagian ini
+            if (query.includes('dm') || query.includes('deathmatch') || query.includes('menyerang')) {
+                return "Aturan DM (Deathmatch): Dilarang keras menyerang atau membunuh player lain tanpa alasan IC (In-Character) atau alasan roleplay yang jelas!";
+            } else if (query.includes('rob') || query.includes('perampokan') || query.includes('geng')) {
+                return "Aturan Rob/Geng: Minimal anggota geng yang aktif melakukan aksi perampokan adalah 3 orang. Dilarang merampok di area safezone!";
+            } else if (query.includes('safezone') || query.includes('bank') || query.includes('rs') || query.includes('hospital')) {
+                return "Aturan Safezone: Area Bank, Rumah Sakit, dan Kantor Polisi adalah Safezone. Segala bentuk tindakan kriminal dilarang di area ini.";
+            } else if (query.includes('pg') || query.includes('powergaming')) {
+                return "Aturan Powergaming (PG): Dilarang melakukan hal yang tidak masuk akal di dunia nyata (Contoh: mengangkat mobil sendirian, lari sambil bawa senjata berat tanpa pertimbangan).";
+            } else if (query.includes('mg') || query.includes('metagaming')) {
+                return "Aturan Metagaming (MG): Dilarang menggunakan informasi OOC (Out of Character) seperti lewat Discord/VC untuk kepentingan IC game.";
             } else {
-                startMusic();
+                return "Waduh, saya kurang paham pertanyaan itu. Coba tanyakan hal lain seputar rules kota atau langsung hubungi Admin yang bertugas ya!";
             }
         }
 
-        function playGangstaBeat(ctx, bassFreq, synthFreq) {
-            let now = ctx.currentTime;
-            let oscBass = ctx.createOscillator();
-            let gainBass = ctx.createGain();
-            let filter = ctx.createBiquadFilter();
-            
-            oscBass.type = 'sawtooth';
-            oscBass.frequency.setValueAtTime(bassFreq / 2, now);
-
-            filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(300, now);
-
-            gainBass.gain.setValueAtTime(0.5, now);
-            gainBass.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
-
-            oscBass.connect(filter);
-            filter.connect(gainBass);
-            gainBass.connect(ctx.destination);
-
-            oscBass.start(now);
-            oscBass.stop(now + 0.25);
-
-            if (step % 2 === 0) {
-                let oscLead = ctx.createOscillator();
-                let gainLead = ctx.createGain();
-
-                oscLead.type = 'sine';
-                oscLead.frequency.setValueAtTime(synthFreq, now);
-                oscLead.frequency.exponentialRampToValueAtTime(synthFreq * 1.5, now + 0.2);
-
-                gainLead.gain.setValueAtTime(0.15, now);
-                gainLead.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-
-                oscLead.connect(gainLead);
-                gainLead.connect(ctx.destination);
-
-                oscLead.start(now);
-                oscLead.stop(now + 0.25);
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
             }
         }
     </script>
