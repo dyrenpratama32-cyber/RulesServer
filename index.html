@@ -604,7 +604,7 @@
         let bgmInterval = null;
         let isBgmPlaying = false;
 
-        // --- SISTEM PEMBUATAN LAGU JEPANG SAMURAI/KSATRIA TEMPO CEPAT & SEMANGAT (Web Audio API) ---
+        // --- SISTEM BGM JEPANG PERTEMPURAN (VOLUME TINGGI & JELAS) ---
         function startSamuraiBGM() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -614,13 +614,11 @@
             }
             isBgmPlaying = true;
             
-            // Tangga nada Pentatonis Jepang / Yo Scale (Lebih energik, megah, dan bersemangat)
+            // Yo Scale Pentatonis Jepang (Energik & Keras)
             const semangatScale = [220.00, 246.94, 293.66, 329.63, 392.00, 440.00, 493.88, 587.33, 659.25, 783.99];
-            
-            // Melodi utama khas pertempuran
             const melodyPattern = [0, 2, 3, 5, 4, 3, 2, 5, 7, 5, 4, 3, 2, 0];
 
-            function playNote(freq, duration, type = 'sawtooth', volume = 0.08) {
+            function playNote(freq, duration, type = 'sawtooth', volume = 0.28) {
                 if (!isBgmPlaying) return;
                 try {
                     const osc = audioCtx.createOscillator();
@@ -629,9 +627,9 @@
                     osc.type = type;
                     osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
 
-                    // Fade in & Attack cepat untuk kesan semangat/tegas
+                    // Volume ditingkatkan tajam
                     gain.gain.setValueAtTime(volume, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
 
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
@@ -641,7 +639,7 @@
                 } catch(e) {}
             }
 
-            // Simulasi Suara Taiko (Drum Perang Jepang)
+            // Suara Drum Taiko Keras
             function playTaiko(isHeavy = false) {
                 if (!isBgmPlaying) return;
                 try {
@@ -649,11 +647,12 @@
                     const gain = audioCtx.createGain();
 
                     osc.type = 'triangle';
-                    const startFreq = isHeavy ? 120 : 180;
+                    const startFreq = isHeavy ? 140 : 200;
                     osc.frequency.setValueAtTime(startFreq, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + (isHeavy ? 0.35 : 0.15));
+                    osc.frequency.exponentialRampToValueAtTime(35, audioCtx.currentTime + (isHeavy ? 0.35 : 0.15));
 
-                    gain.gain.setValueAtTime(isHeavy ? 0.4 : 0.25, audioCtx.currentTime);
+                    // Volume Drum dinaikkan tinggi (0.8 & 0.5)
+                    gain.gain.setValueAtTime(isHeavy ? 0.8 : 0.5, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (isHeavy ? 0.35 : 0.15));
 
                     osc.connect(gain);
@@ -665,29 +664,28 @@
             }
 
             let step = 0;
-            // Tempo dinaikkan pesat (interval 180ms per ketukan / ~166 BPM)
+            // Tempo cepat 166 BPM (180ms per step)
             bgmInterval = setInterval(() => {
                 if (!isBgmPlaying) return;
 
-                // 1. Pola Drum Taiko (Rhythm Perang)
+                // 1. Ketukan Taiko Drum (Rhythm Perang Keras)
                 if (step % 4 === 0) {
-                    playTaiko(true); // Dentuman berat di awal baris
+                    playTaiko(true);
                 } else if (step % 2 === 0) {
-                    playTaiko(false); // Ketukan drum cepat
+                    playTaiko(false);
                 } else if (step % 8 === 7) {
-                    playTaiko(false); // Ketukan ganda sebelum pergantian bar
+                    playTaiko(false);
                 }
 
-                // 2. Melodi Synth Shamisen/Shakuhachi Energik
+                // 2. Melodi Cyber Shamisen Utama (Terdengar jelas & nyaring)
                 const noteIdx = melodyPattern[step % melodyPattern.length];
                 const freq = semangatScale[noteIdx];
                 
-                // Melodi Lead
-                playNote(freq, 0.25, 'sawtooth', 0.07);
+                playNote(freq, 0.25, 'sawtooth', 0.28);
                 
-                // Bass Line Pembakar Semangat (1 oktav di bawah)
+                // Dentuman Bass Energetik
                 if (step % 2 === 0) {
-                    playNote(semangatScale[step % 4] / 2, 0.4, 'square', 0.05);
+                    playNote(semangatScale[step % 4] / 2, 0.4, 'square', 0.22);
                 }
 
                 step++;
