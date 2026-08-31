@@ -135,7 +135,7 @@
             z-index: 2;
         }
 
-        /* --- BOT 01: CINEMATIC KNIGHT (KSATRIA) AVATAR --- */
+        /* --- BOT 01: CINEMATIC KNIGHT AVATAR --- */
         .knight-avatar {
             width: 70px;
             height: 80px;
@@ -143,7 +143,6 @@
             animation: float 3.5s ease-in-out infinite;
         }
 
-        /* Helm Ksatria */
         .knight-helmet {
             width: 44px;
             height: 38px;
@@ -160,7 +159,6 @@
             transition: transform 0.2s;
         }
 
-        /* Mahkota / Bulu Helm Ksatria */
         .knight-crest {
             width: 12px;
             height: 18px;
@@ -172,7 +170,6 @@
             box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
         }
 
-        /* Visor Helm Ksatria */
         .knight-visor {
             width: 32px;
             height: 8px;
@@ -190,7 +187,6 @@
             z-index: 3;
         }
 
-        /* Mata Glowing Ksatria */
         .knight-eye {
             width: 8px;
             height: 3px;
@@ -200,7 +196,6 @@
             animation: pulseKnightEyes 2s infinite alternate;
         }
 
-        /* Armor Dada Ksatria */
         .knight-gorget {
             width: 36px;
             height: 14px;
@@ -603,6 +598,23 @@
         let audioCtx = null;
         let bgmInterval = null;
         let isBgmPlaying = false;
+        let maleVoice = null;
+
+        // --- FILTER HANYA SUARA PRIA / LAKI-LAKI ---
+        function loadVoices() {
+            if (!('speechSynthesis' in window)) return;
+            const voices = window.speechSynthesis.getVoices();
+            // Cari suara pria lokal atau bahasa indonesia/inggris bersuara berat
+            maleVoice = voices.find(v => (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('google id-id') || v.name.toLowerCase().includes('indonesian')) && !v.name.toLowerCase().includes('female') && !v.name.toLowerCase().includes('zira') && !v.name.toLowerCase().includes('gadis'));
+            if (!maleVoice && voices.length > 0) {
+                maleVoice = voices[0];
+            }
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+            loadVoices();
+        }
 
         // --- SISTEM BGM JEPANG PERTEMPURAN (VOLUME TINGGI & JELAS) ---
         function startSamuraiBGM() {
@@ -614,7 +626,6 @@
             }
             isBgmPlaying = true;
             
-            // Yo Scale Pentatonis Jepang (Energik & Keras)
             const semangatScale = [220.00, 246.94, 293.66, 329.63, 392.00, 440.00, 493.88, 587.33, 659.25, 783.99];
             const melodyPattern = [0, 2, 3, 5, 4, 3, 2, 5, 7, 5, 4, 3, 2, 0];
 
@@ -627,7 +638,6 @@
                     osc.type = type;
                     osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
 
-                    // Volume ditingkatkan tajam
                     gain.gain.setValueAtTime(volume, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
 
@@ -639,7 +649,6 @@
                 } catch(e) {}
             }
 
-            // Suara Drum Taiko Keras
             function playTaiko(isHeavy = false) {
                 if (!isBgmPlaying) return;
                 try {
@@ -651,7 +660,6 @@
                     osc.frequency.setValueAtTime(startFreq, audioCtx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(35, audioCtx.currentTime + (isHeavy ? 0.35 : 0.15));
 
-                    // Volume Drum dinaikkan tinggi (0.8 & 0.5)
                     gain.gain.setValueAtTime(isHeavy ? 0.8 : 0.5, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (isHeavy ? 0.35 : 0.15));
 
@@ -664,11 +672,9 @@
             }
 
             let step = 0;
-            // Tempo cepat 166 BPM (180ms per step)
             bgmInterval = setInterval(() => {
                 if (!isBgmPlaying) return;
 
-                // 1. Ketukan Taiko Drum (Rhythm Perang Keras)
                 if (step % 4 === 0) {
                     playTaiko(true);
                 } else if (step % 2 === 0) {
@@ -677,13 +683,11 @@
                     playTaiko(false);
                 }
 
-                // 2. Melodi Cyber Shamisen Utama (Terdengar jelas & nyaring)
                 const noteIdx = melodyPattern[step % melodyPattern.length];
                 const freq = semangatScale[noteIdx];
                 
                 playNote(freq, 0.25, 'sawtooth', 0.28);
                 
-                // Dentuman Bass Energetik
                 if (step % 2 === 0) {
                     playNote(semangatScale[step % 4] / 2, 0.4, 'square', 0.22);
                 }
@@ -735,10 +739,15 @@
             utterance.lang = 'id-ID';
             utterance.rate = 0.95;
 
+            if (maleVoice) {
+                utterance.voice = maleVoice;
+            }
+
+            // MENGESET PITCH KHUSUS NADA PRIA / LAKI-LAKI (Pitch rendah & berat)
             if (currentTalk.bot === 1) {
-                utterance.pitch = 0.85; // Suara Ksatria yang berat
+                utterance.pitch = 0.65; // Suara pria berat / Ksatria
             } else {
-                utterance.pitch = 1.35; // Suara Samurai
+                utterance.pitch = 0.85; // Suara pria berwibawa / Samurai
             }
 
             const talkBot = currentTalk.bot === 1 ? document.getElementById('bot01Container') : document.getElementById('bot02Container');
@@ -765,6 +774,7 @@
 
         function enterSystem() {
             isAudioAllowed = true;
+            loadVoices();
             const intro = document.getElementById('cinematicIntro');
             intro.style.opacity = '0';
             setTimeout(() => {
