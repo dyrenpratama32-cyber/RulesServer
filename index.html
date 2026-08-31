@@ -3,161 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rules Kota - AI Assistant</title>
+    <title>AI Assistant - Ngobrol Santai</title>
     <style>
         body {
-            background-color: #0f172a;
-            color: #f8fafc;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
         }
         .chat-container {
             width: 100%;
-            max-width: 500px;
-            background: #1e293b;
+            max-width: 400px;
+            height: 600px;
+            background: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            border: 1px solid #334155;
         }
         .chat-header {
-            background: #0284c7;
+            background-color: #0084ff;
             color: white;
             padding: 15px;
-            font-weight: bold;
             text-align: center;
+            font-weight: bold;
             font-size: 16px;
-            letter-spacing: 1px;
         }
         .chat-messages {
-            height: 350px;
-            overflow-y: auto;
+            flex: 1;
             padding: 15px;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
         .message {
-            padding: 10px 14px;
-            border-radius: 8px;
             max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 15px;
             font-size: 14px;
             line-height: 1.4;
         }
-        .bot-message {
-            background: #334155;
-            color: #f1f5f9;
+        .message.ai {
+            background-color: #e4e6eb;
+            color: #050505;
             align-self: flex-start;
-            border-left: 4px solid #38bdf8;
+            border-bottom-left-radius: 2px;
         }
-        .user-message {
-            background: #0284c7;
+        .message.user {
+            background-color: #0084ff;
             color: white;
             align-self: flex-end;
+            border-bottom-right-radius: 2px;
         }
         .chat-input-area {
             display: flex;
-            padding: 12px;
-            background: #0f172a;
-            border-top: 1px solid #334155;
-        }
-        input[type="text"] {
-            flex: 1;
             padding: 10px;
-            border: 1px solid #475569;
-            background: #1e293b;
-            color: white;
-            border-radius: 6px;
+            background: #ffffff;
+            border-top: 1px solid #ddd;
+        }
+        .chat-input-area input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
             outline: none;
             font-size: 14px;
         }
-        input[type="text"]:focus {
-            border-color: #38bdf8;
-        }
-        button {
-            background: #0284c7;
+        .chat-input-area button {
+            background-color: #0084ff;
             color: white;
             border: none;
-            padding: 10px 18px;
+            padding: 0 16px;
             margin-left: 8px;
-            border-radius: 6px;
+            border-radius: 20px;
             cursor: pointer;
             font-weight: bold;
-            transition: 0.2s;
         }
-        button:hover {
-            background: #0369a1;
+        .chat-input-area button:hover {
+            background-color: #006dd9;
         }
     </style>
 </head>
 <body>
 
     <div class="chat-container">
-        <div class="chat-header">BOT RULES KOTA ROLEPLAY</div>
+        <div class="chat-header">Asisten AI Harian</div>
         <div class="chat-messages" id="chatMessages">
-            <div class="message bot-message">Halo warga baru! Silakan tanyakan apa saja seputar rules atau peraturan kota kita di sini (Contoh: "Apa itu DM?", "Berapa minimal rob?").</div>
+            <div class="message ai">Halo! Aku asisten setiamu. Ada yang bisa aku bantu hari ini, atau mau ngobrol santai?</div>
         </div>
         <div class="chat-input-area">
-            <input type="text" id="userInput" placeholder="Ketik pertanyaan rules..." onkeypress="handleKeyPress(event)">
+            <input type="text" id="userInput" placeholder="Ketik pesan di sini..." onkeypress="handleKeyPress(event)">
             <button onclick="sendMessage()">Kirim</button>
         </div>
     </div>
 
     <script>
-        function sendMessage() {
-            const inputField = document.getElementById('userInput');
+        function appendMessage(sender, text) {
             const chatMessages = document.getElementById('chatMessages');
-            const text = inputField.value.trim();
-
-            if (text === '') return;
-
-            // Tampilkan pesan user
-            const userMsgDiv = document.createElement('div');
-            userMsgDiv.className = 'message user-message';
-            userMsgDiv.textContent = text;
-            chatMessages.appendChild(userMsgDiv);
-
-            inputField.value = '';
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender);
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            // Respon otomatis bot berdasarkan kata kunci rules
-            setTimeout(() => {
-                const botMsgDiv = document.createElement('div');
-                botMsgDiv.className = 'message bot-message';
-                botMsgDiv.textContent = getBotResponse(text.toLowerCase());
-                chatMessages.appendChild(botMsgDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 400);
         }
 
-        function getBotResponse(query) {
-            // Ubah atau tambah aturan kota Anda di bagian ini
-            if (query.includes('dm') || query.includes('deathmatch') || query.includes('menyerang')) {
-                return "Aturan DM (Deathmatch): Dilarang keras menyerang atau membunuh player lain tanpa alasan IC (In-Character) atau alasan roleplay yang jelas!";
-            } else if (query.includes('rob') || query.includes('perampokan') || query.includes('geng')) {
-                return "Aturan Rob/Geng: Minimal anggota geng yang aktif melakukan aksi perampokan adalah 3 orang. Dilarang merampok di area safezone!";
-            } else if (query.includes('safezone') || query.includes('bank') || query.includes('rs') || query.includes('hospital')) {
-                return "Aturan Safezone: Area Bank, Rumah Sakit, dan Kantor Polisi adalah Safezone. Segala bentuk tindakan kriminal dilarang di area ini.";
-            } else if (query.includes('pg') || query.includes('powergaming')) {
-                return "Aturan Powergaming (PG): Dilarang melakukan hal yang tidak masuk akal di dunia nyata (Contoh: mengangkat mobil sendirian, lari sambil bawa senjata berat tanpa pertimbangan).";
-            } else if (query.includes('mg') || query.includes('metagaming')) {
-                return "Aturan Metagaming (MG): Dilarang menggunakan informasi OOC (Out of Character) seperti lewat Discord/VC untuk kepentingan IC game.";
+        function getAIResponse(input) {
+            input = input.toLowerCase();
+
+            if (input.includes('halo') || input.includes('hai') || input.includes('pagi') || input.includes('siang') || input.includes('sore') || input.includes('malam')) {
+                return "Halo juga! Senang bisa ngobrol sama kamu. Gimana kabar kamu hari ini?";
+            } else if (input.includes('sehat') || input.includes('baik') || input.includes('alhamdulillah') || input.includes('luar biasa')) {
+                return "Syukurlah kalau kamu sehat dan baik-baik saja! Jaga kesehatan terus ya.";
+            } else if (input.includes('kurang sehat') || input.includes('sakit') || input.includes('lelah') || input.includes('capek')) {
+                return "Wah, lekas sembuh atau istirahat yang cukup ya! Jangan diporsir, kesehatanmu yang paling utama.";
+            } else if (input.includes('terima kasih') || input.includes('makasih')) {
+                return "Sama-sama! Kalau butuh teman ngobrol atau bantuan lagi, panggil aku ya.";
+            } else if (input.includes('dadah') || input.includes('bye')) {
+                return "Dadah! Sampai jumpa lagi, semoga harimu menyenangkan!";
             } else {
-                return "Waduh, saya kurang paham pertanyaan itu. Coba tanyakan hal lain seputar rules kota atau langsung hubungi Admin yang bertugas ya!";
+                return "Wah, menarik banget! Ceritakan lebih banyak dong, atau tanyakan hal lain kalau ada yang ingin dibahas.";
             }
         }
 
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') {
+        function sendMessage() {
+            const inputField = document.getElementById('userInput');
+            const text = inputField.value.trim();
+            if (text === "") return;
+
+            appendMessage('user', text);
+            inputField.value = "";
+
+            setTimeout(() => {
+                const response = getAIResponse(text);
+                appendMessage('ai', response);
+            }, 500);
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
                 sendMessage();
             }
         }
     </script>
+
 </body>
 </html>
