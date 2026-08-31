@@ -115,7 +115,6 @@
             gap: 8px;
         }
 
-        /* Robot Big Size */
         .robot-avatar-lg {
             width: 70px;
             height: 70px;
@@ -170,12 +169,10 @@
             animation: blink 4s infinite;
         }
 
-        /* Robot Talking Animation */
         .speaking .robot-head-lg {
-            transform: scale(1.1);
+            transform: scale(1.15);
         }
 
-        /* Robot 2 (Cyan theme) */
         .robot-avatar-lg.cyan .robot-head-lg {
             border-color: #38bdf8;
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
@@ -184,7 +181,6 @@
         .robot-avatar-lg.cyan .robot-antenna-ball-lg { background: #0ea5e9; box-shadow: 0 0 12px #0ea5e9; }
         .robot-avatar-lg.cyan .robot-eye-lg { background-color: #0ea5e9; box-shadow: 0 0 10px #0ea5e9; }
 
-        /* Dialog Box */
         .robot-dialog-box {
             background: rgba(30, 41, 59, 0.9);
             border: 1px solid #d4af37;
@@ -333,7 +329,6 @@
             background-color: #0f172a;
         }
 
-        /* --- KEYFRAMES --- */
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-8px); }
@@ -385,9 +380,8 @@
         <span>Official Server AI Assistant</span>
     </header>
 
-    <!-- STAGE ROBOT INTERAKSI (CINEMATIC CHAT ROBOT TO ROBOT) -->
+    <!-- STAGE ROBOT INTERAKSI -->
     <div class="robot-stage">
-        <!-- Robot 1 (Alpha) -->
         <div class="robot-container" id="bot01Container">
             <div class="robot-avatar-lg">
                 <div class="robot-antenna-ball-lg"></div>
@@ -400,12 +394,10 @@
             <span class="robot-label">DYREN BOT 01</span>
         </div>
 
-        <!-- Dynamic Dialog Box -->
         <div class="robot-dialog-box" id="robotTalk">
-            "Bro, bagaimana aturan ramboing di kota atau server ini?"
+            "Sistem siap digunakan."
         </div>
 
-        <!-- Robot 2 (Beta) -->
         <div class="robot-container" id="bot02Container">
             <div class="robot-avatar-lg cyan">
                 <div class="robot-antenna-ball-lg"></div>
@@ -444,51 +436,8 @@
 
     <script>
         let isAudioAllowed = false;
+        let talkIndex = 0;
 
-        // FUNGSI SUARA ROBOT (TEXT-TO-SPEECH BAHASA INDONESIA)
-        function speakText(text, isRobotOne) {
-            if (!isAudioAllowed || !('speechSynthesis' in window)) return;
-
-            window.speechSynthesis.cancel(); // Hentikan suara sebelumnya
-
-            // Clean HTML tag
-            const cleanText = text.replace(/<[^>]*>?/gm, '');
-
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            utterance.lang = 'id-ID';
-
-            // Pembeda Nada Suara Bot 1 dan Bot 2
-            if (isRobotOne) {
-                utterance.pitch = 0.8; // Nada lebih berat
-                utterance.rate = 1.0;
-            } else {
-                utterance.pitch = 1.3; // Nada lebih tinggi / futuristik
-                utterance.rate = 1.05;
-            }
-
-            // Animasi Efek Bicara
-            const talkBot = isRobotOne ? document.getElementById('bot01Container') : document.getElementById('bot02Container');
-            talkBot.classList.add('speaking');
-
-            utterance.onend = () => {
-                talkBot.classList.remove('speaking');
-            };
-
-            window.speechSynthesis.speak(utterance);
-        }
-
-        // FUNGSI ENTER SYSTEM
-        function enterSystem() {
-            isAudioAllowed = true;
-            const intro = document.getElementById('cinematicIntro');
-            intro.style.opacity = '0';
-            setTimeout(() => {
-                intro.style.visibility = 'hidden';
-                triggerRobotDialog(0); // Mulai dialog pertama saat masuk
-            }, 1000);
-        }
-
-        // DATA DIALOG DAN SUARA ROBOT
         const robotConversations = [
             { bot: 1, text: "Bro, bagaimana aturan ramboing di kota atau server ini?" },
             { bot: 2, text: "Hasil kerja tanpa tas maksimal 200, kalau pakai tas bisa membawa sampai 250." },
@@ -499,30 +448,71 @@
             { bot: 1, text: "Siap, wajib mematuhi rules demi keadilan roleplay!" }
         ];
 
-        let talkIndex = 0;
-
+        // FUNGSI UTAMA BICARA DAN PERGANTIAN OTOMATIS
         function triggerRobotDialog(index) {
+            if (!isAudioAllowed) return;
+
             const currentTalk = robotConversations[index];
             const talkBox = document.getElementById('robotTalk');
             const botName = currentTalk.bot === 1 ? "DYREN BOT 01" : "DYREN BOT 02";
             
+            // Perbarui visual teks dialog
             talkBox.style.animation = 'none';
-            talkBox.offsetHeight; // trigger reflow
+            talkBox.offsetHeight;
             talkBox.style.animation = 'dialogFade 0.5s ease-in-out';
             talkBox.innerHTML = `<b>${botName}:</b> "${currentTalk.text}"`;
 
-            // Bunyikan Suara Bahasa Indonesia
-            speakText(currentTalk.text, currentTalk.bot === 1);
+            if (!('speechSynthesis' in window)) return;
+
+            window.speechSynthesis.cancel(); // Bersihkan antrean lama
+
+            const utterance = new SpeechSynthesisUtterance(currentTalk.text);
+            utterance.lang = 'id-ID';
+            utterance.rate = 0.95; // Kecepatan ideal pembacaan Bahasa Indonesia
+
+            if (currentTalk.bot === 1) {
+                utterance.pitch = 0.85; // Nada Bot 1
+            } else {
+                utterance.pitch = 1.25; // Nada Bot 2
+            }
+
+            const talkBot = currentTalk.bot === 1 ? document.getElementById('bot01Container') : document.getElementById('bot02Container');
+            talkBot.classList.add('speaking');
+
+            // HANYA LANJUT KE DIALOG BERIKUTNYA SETELAH SUARA SELESAI
+            utterance.onend = () => {
+                talkBot.classList.remove('speaking');
+                
+                // Jeda 1.5 detik antar dialog agar tidak terlalu cepat
+                setTimeout(() => {
+                    talkIndex = (talkIndex + 1) % robotConversations.length;
+                    triggerRobotDialog(talkIndex);
+                }, 1500);
+            };
+
+            // Penanganan jika terjadi eror suara agar siklus dialog tidak macet
+            utterance.onerror = () => {
+                talkBot.classList.remove('speaking');
+                setTimeout(() => {
+                    talkIndex = (talkIndex + 1) % robotConversations.length;
+                    triggerRobotDialog(talkIndex);
+                }, 2000);
+            };
+
+            window.speechSynthesis.speak(utterance);
         }
 
-        // PERGANTIAN DIALOG ANTIMACET
-        setInterval(() => {
-            if (!isAudioAllowed) return;
-            talkIndex = (talkIndex + 1) % robotConversations.length;
-            triggerRobotDialog(talkIndex);
-        }, 5000);
+        function enterSystem() {
+            isAudioAllowed = true;
+            const intro = document.getElementById('cinematicIntro');
+            intro.style.opacity = '0';
+            setTimeout(() => {
+                intro.style.visibility = 'hidden';
+                triggerRobotDialog(0); // Mulai siklus dialog interaktif
+            }, 1000);
+        }
 
-        // DATABASE RULES SERVER
+        // DATABASE CHATBOT
         const ramboingRulesText = `Demi menjaga keseimbangan, keadilan, dan kualitas Roleplay, berikut adalah pembaruan <b>Rules Ramboing</b> yang WAJIB dipatuhi oleh seluruh pemain. ⚖️✨<br><br>
 📦 <b>Batas Maksimal Hasil Kerja:</b><br>
 📌 Tanpa Tas: Max 200<br>
