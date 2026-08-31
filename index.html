@@ -35,36 +35,86 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            position: relative;
         }
 
-        /* Teks STUDIO Menyala Cyber Berubah Warna */
+        /* Teks STUDIO Menyala Cyber Warna-Warni di Kiri-Tengah Atas */
         .studio-neon-title {
+            position: absolute;
+            top: 15px;
+            left: 30px;
             font-size: clamp(14px, 2.5vw, 18px);
             font-weight: bold;
             letter-spacing: 6px;
-            margin-bottom: 12px;
-            text-align: center;
             animation: cyberColorShift 6s infinite alternate ease-in-out;
             text-transform: uppercase;
+            z-index: 10;
         }
 
         @keyframes cyberColorShift {
             0% { 
                 color: #00f3ff; 
-                text-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff, 0 0 30px #00f3ff; 
+                text-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff; 
             }
             33% { 
                 color: #bd00ff; 
-                text-shadow: 0 0 10px #bd00ff, 0 0 20px #bd00ff, 0 0 30px #bd00ff; 
+                text-shadow: 0 0 10px #bd00ff, 0 0 20px #bd00ff; 
             }
             66% { 
                 color: #ff0055; 
-                text-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055, 0 0 30px #ff0055; 
+                text-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055; 
             }
             100% { 
                 color: #00ff66; 
-                text-shadow: 0 0 10px #00ff66, 0 0 20px #00ff66, 0 0 30px #00ff66; 
+                text-shadow: 0 0 10px #00ff66, 0 0 20px #00ff66; 
             }
+        }
+
+        /* Emoji Cyber Bergerak di Kanan Atas (Mata Melirik + Katana Berkibas) */
+        .cyber-emoji-container {
+            position: absolute;
+            top: 15px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--neon-cyan);
+            padding: 6px 12px;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            z-index: 10;
+            animation: containerFloat 3s infinite ease-in-out alternate;
+        }
+
+        @keyframes containerFloat {
+            0% { transform: translateY(0); box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); }
+            100% { transform: translateY(-4px); box-shadow: 0 0 20px rgba(189, 0, 255, 0.4); }
+        }
+
+        .cyber-bot-emoji {
+            font-size: 22px;
+            display: inline-block;
+            animation: eyeBlinkAndLook 4s infinite ease-in-out;
+        }
+
+        @keyframes eyeBlinkAndLook {
+            0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 5px var(--neon-cyan)); }
+            25% { transform: scale(1.08) rotate(-5deg); filter: drop-shadow(0 0 8px var(--neon-purple)); }
+            50% { transform: scale(0.95) rotate(5deg); filter: drop-shadow(0 0 5px var(--neon-cyan)); }
+            75% { transform: scale(1.05) rotate(0deg); filter: drop-shadow(0 0 10px #ff0055); }
+        }
+
+        .cyber-katana-emoji {
+            font-size: 20px;
+            display: inline-block;
+            animation: katanaAction 1.5s infinite alternate ease-in-out;
+            transform-origin: bottom left;
+        }
+
+        @keyframes katanaAction {
+            0% { transform: rotate(-15deg) translateY(0); filter: drop-shadow(0 0 4px #00f3ff); }
+            100% { transform: rotate(15deg) translateY(-2px) scale(1.1); filter: drop-shadow(0 0 10px #ff0055); }
         }
 
         /* Cinematic Intro Overlay */
@@ -135,8 +185,8 @@
         .cyber-container {
             width: 100%;
             max-width: 500px;
-            height: 88vh;
-            max-height: 740px;
+            height: 86vh;
+            max-height: 720px;
             background: var(--panel-bg);
             backdrop-filter: blur(12px);
             border: 1px solid var(--border-glow);
@@ -146,6 +196,7 @@
             flex-direction: column;
             overflow: hidden;
             position: relative;
+            margin-top: 35px;
             opacity: 0;
             animation: fadeInMain 1s ease 4.8s forwards;
         }
@@ -154,7 +205,7 @@
             to { opacity: 1; }
         }
 
-        /* Header Cyber dengan Animasi Katana Bot */
+        /* Header Cyber */
         .cyber-header {
             background: linear-gradient(90deg, rgba(0,243,255,0.1), rgba(189,0,255,0.1));
             border-bottom: 1px solid var(--border-glow);
@@ -172,8 +223,8 @@
 
         .bot-avatar-container {
             position: relative;
-            width: 46px;
-            height: 46px;
+            width: 44px;
+            height: 44px;
         }
 
         .bot-avatar {
@@ -198,30 +249,6 @@
             border-color: var(--neon-purple);
             color: var(--neon-purple);
             box-shadow: 0 0 10px var(--neon-purple);
-        }
-
-        .katana-blade {
-            position: absolute;
-            top: -8px;
-            right: -12px;
-            width: 28px;
-            height: 4px;
-            background: linear-gradient(90deg, #fff, var(--neon-cyan));
-            border-radius: 2px;
-            transform: rotate(-45deg);
-            box-shadow: 0 0 8px var(--neon-cyan);
-            animation: katanaSwing 3s infinite ease-in-out;
-            z-index: 3;
-        }
-
-        .bot-avatar.dzoe ~ .katana-blade {
-            background: linear-gradient(90deg, #fff, var(--neon-red));
-            box-shadow: 0 0 8px var(--neon-red);
-        }
-
-        @keyframes katanaSwing {
-            0%, 100% { transform: rotate(-45deg) translate(0, 0); }
-            50% { transform: rotate(-25deg) translate(4px, -4px) scale(1.1); filter: brightness(1.5); }
         }
 
         @keyframes botPulse {
@@ -429,8 +456,14 @@
         <div class="cinematic-subtitle">INITIALIZING NEURAL LINK: DYREN & DZOE // KATANA PROTOCOL</div>
     </div>
 
-    <!-- Teks STUDIO Menyala Cyber Warna-Warni -->
+    <!-- Teks STUDIO Menyala Cyber di Kiri-Tengah Atas -->
     <div class="studio-neon-title">STUDIO</div>
+
+    <!-- Emoji Cyber Bergerak Memegang Katana di Kanan Atas -->
+    <div class="cyber-emoji-container">
+        <span class="cyber-bot-emoji">🤖⚡</span>
+        <span class="cyber-katana-emoji">⚔️</span>
+    </div>
 
     <div class="cyber-container">
         <!-- Header -->
@@ -438,7 +471,6 @@
             <div class="bot-profiles">
                 <div class="bot-avatar-container">
                     <div class="bot-avatar" id="activeAvatar">DY</div>
-                    <div class="katana-blade" id="katanaBlade"></div>
                 </div>
                 <div class="bot-info">
                     <h1 id="activeBotName">DYREN & DZOE</h1>
@@ -520,20 +552,15 @@
 
             const avatarEl = document.getElementById('activeAvatar');
             const nameEl = document.getElementById('activeBotName');
-            const katanaEl = document.getElementById('katanaBlade');
 
             if (isDzoe) {
                 avatarEl.className = 'bot-avatar dzoe';
                 avatarEl.textContent = 'DZ';
                 nameEl.textContent = 'DZOE (Katana Ready)';
-                katanaEl.style.background = 'linear-gradient(90deg, #fff, #ff0055)';
-                katanaEl.style.boxShadow = '0 0 8px #ff0055';
             } else {
                 avatarEl.className = 'bot-avatar';
                 avatarEl.textContent = 'DY';
                 nameEl.textContent = 'DYREN (Katana Ready)';
-                katanaEl.style.background = 'linear-gradient(90deg, #fff, var(--neon-cyan))';
-                katanaEl.style.boxShadow = '0 0 8px var(--neon-cyan)';
             }
 
             let responseText = "";
