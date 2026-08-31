@@ -598,16 +598,23 @@
         let audioCtx = null;
         let bgmInterval = null;
         let isBgmPlaying = false;
-        let maleVoice = null;
+        let indoMaleVoice = null;
 
-        // --- FILTER HANYA SUARA PRIA / LAKI-LAKI ---
+        // --- FILTER SUARA BAHASA INDONESIA KHUSUS PRIA ---
         function loadVoices() {
             if (!('speechSynthesis' in window)) return;
             const voices = window.speechSynthesis.getVoices();
-            // Cari suara pria lokal atau bahasa indonesia/inggris bersuara berat
-            maleVoice = voices.find(v => (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('google id-id') || v.name.toLowerCase().includes('indonesian')) && !v.name.toLowerCase().includes('female') && !v.name.toLowerCase().includes('zira') && !v.name.toLowerCase().includes('gadis'));
-            if (!maleVoice && voices.length > 0) {
-                maleVoice = voices[0];
+            
+            // Prioritaskan mencari suara Indonesia pria
+            indoMaleVoice = voices.find(v => 
+                (v.lang.includes('id') || v.lang.includes('ID')) && 
+                (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('pria') || v.name.toLowerCase().includes('ardhi') || v.name.toLowerCase().includes('andika')) &&
+                !v.name.toLowerCase().includes('female') && !v.name.toLowerCase().includes('gadis') && !v.name.toLowerCase().includes('zira')
+            );
+
+            // Jika tidak ada nama 'male' eksplisit, ambil suara Indonesia umum
+            if (!indoMaleVoice) {
+                indoMaleVoice = voices.find(v => v.lang.includes('id') || v.lang.includes('ID'));
             }
         }
 
@@ -616,7 +623,7 @@
             loadVoices();
         }
 
-        // --- SISTEM BGM JEPANG PERTEMPURAN (VOLUME TINGGI & JELAS) ---
+        // --- BGM TAIKO JEPANG PERTEMPURAN ---
         function startSamuraiBGM() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -708,7 +715,7 @@
             }
         }
 
-        // --- DIALOG SISTEM KSATRIA & SAMURAI ---
+        // --- DIALOG PERCAKAPAN BERBAHASA INDONESIA ---
         const robotConversations = [
             { bot: 1, text: "Ksatria, bagaimana aturan ramboing di kota atau server ini?" },
             { bot: 2, text: "Hasil kerja tanpa tas maksimal 200, kalau pakai tas bisa membawa sampai 250." },
@@ -736,18 +743,20 @@
             window.speechSynthesis.cancel();
 
             const utterance = new SpeechSynthesisUtterance(currentTalk.text);
+            
+            // Pengaturan Bahasa Indonesia
             utterance.lang = 'id-ID';
-            utterance.rate = 0.95;
+            utterance.rate = 0.92;
 
-            if (maleVoice) {
-                utterance.voice = maleVoice;
+            if (indoMaleVoice) {
+                utterance.voice = indoMaleVoice;
             }
 
-            // MENGESET PITCH KHUSUS NADA PRIA / LAKI-LAKI (Pitch rendah & berat)
+            // PITCH RENDAH UNTUK MEMASTIKAN SUARA PRIA/BERAT
             if (currentTalk.bot === 1) {
-                utterance.pitch = 0.65; // Suara pria berat / Ksatria
+                utterance.pitch = 0.60; // Suara pria berat / Ksatria
             } else {
-                utterance.pitch = 0.85; // Suara pria berwibawa / Samurai
+                utterance.pitch = 0.75; // Suara pria mantap / Samurai
             }
 
             const talkBot = currentTalk.bot === 1 ? document.getElementById('bot01Container') : document.getElementById('bot02Container');
