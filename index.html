@@ -31,9 +31,40 @@
             color: var(--text-main);
             height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             overflow: hidden;
+        }
+
+        /* Teks STUDIO Menyala Cyber Berubah Warna */
+        .studio-neon-title {
+            font-size: clamp(14px, 2.5vw, 18px);
+            font-weight: bold;
+            letter-spacing: 6px;
+            margin-bottom: 12px;
+            text-align: center;
+            animation: cyberColorShift 6s infinite alternate ease-in-out;
+            text-transform: uppercase;
+        }
+
+        @keyframes cyberColorShift {
+            0% { 
+                color: #00f3ff; 
+                text-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff, 0 0 30px #00f3ff; 
+            }
+            33% { 
+                color: #bd00ff; 
+                text-shadow: 0 0 10px #bd00ff, 0 0 20px #bd00ff, 0 0 30px #bd00ff; 
+            }
+            66% { 
+                color: #ff0055; 
+                text-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055, 0 0 30px #ff0055; 
+            }
+            100% { 
+                color: #00ff66; 
+                text-shadow: 0 0 10px #00ff66, 0 0 20px #00ff66, 0 0 30px #00ff66; 
+            }
         }
 
         /* Cinematic Intro Overlay */
@@ -104,8 +135,8 @@
         .cyber-container {
             width: 100%;
             max-width: 500px;
-            height: 92vh;
-            max-height: 780px;
+            height: 88vh;
+            max-height: 740px;
             background: var(--panel-bg);
             backdrop-filter: blur(12px);
             border: 1px solid var(--border-glow);
@@ -139,7 +170,6 @@
             gap: 12px;
         }
 
-        /* Bot Avatar dengan Efek Animasi Katana Glow */
         .bot-avatar-container {
             position: relative;
             width: 46px;
@@ -170,7 +200,6 @@
             box-shadow: 0 0 10px var(--neon-purple);
         }
 
-        /* Elemen Animasi Katana Membelah / Bersinar */
         .katana-blade {
             position: absolute;
             top: -8px;
@@ -399,6 +428,9 @@
         <div class="cinematic-line"></div>
         <div class="cinematic-subtitle">INITIALIZING NEURAL LINK: DYREN & DZOE // KATANA PROTOCOL</div>
     </div>
+
+    <!-- Teks STUDIO Menyala Cyber Warna-Warni -->
+    <div class="studio-neon-title">STUDIO</div>
 
     <div class="cyber-container">
         <!-- Header -->
