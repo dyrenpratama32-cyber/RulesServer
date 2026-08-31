@@ -3,969 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DYREN STUDIO - Server Assistant</title>
+    <title>Server Aturan - GTA Style</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
         body {
-            background-color: #050811;
-            color: #f8fafc;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* --- WALLPAPER ANIME JEPANG SAMURAI ELEGANT --- */
-        .anime-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(135deg, #050811 0%, #111827 50%, #1f1118 100%);
-            overflow: hidden;
-        }
-
-        /* Siluet Samurai & Nuansa Bulan/Garis Estetik Anime */
-        .anime-bg::before {
-            content: '';
-            position: absolute;
-            top: 10%;
-            right: 8%;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, rgba(212, 175, 55, 0.05) 50%, transparent 80%);
-            border-radius: 50%;
-            box-shadow: 0 0 50px rgba(239, 68, 68, 0.2);
-        }
-
-        .samurai-silhouette {
-            position: absolute;
-            bottom: 0;
-            right: 5%;
-            width: 320px;
-            height: 400px;
-            background: radial-gradient(ellipse at bottom, rgba(30, 41, 59, 0.4) 0%, transparent 70%);
-            opacity: 0.25;
-            pointer-events: none;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300"><path fill="%23ef4444" d="M100 20C80 40 70 60 70 80l10 10-5 30 15 10v40l-20 80h60l-20-80v-40l15-10-5-30 10-10c0-20-10-40-30-60z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: bottom right;
-            filter: blur(1px);
-        }
-
-        /* Efek Kelopak Bunga Sakura / Daun Berjatuhan Estetik */
-        .sakura-petal {
-            position: absolute;
-            background-color: #f472b6;
-            border-radius: 100% 0 100% 0;
-            opacity: 0.5;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(-10vh) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(110vh) translateX(100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* --- INTRO CINEMATIC OVERLAY --- */
-        #cinematicIntro {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, #0f172a 0%, #020408 100%);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1s ease, visibility 1s ease;
-        }
-
-        .intro-title {
-            font-size: 2.5rem;
-            color: #d4af37;
-            letter-spacing: 4px;
-            font-weight: 800;
-            text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
-            margin-bottom: 0.5rem;
-            animation: fadeInDown 1.2s ease forwards;
-        }
-
-        .intro-sub {
-            color: #94a3b8;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            margin-bottom: 2rem;
-            animation: fadeInUp 1.2s ease forwards;
-        }
-
-        .btn-enter {
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, #d4af37 0%, #b45309 100%);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-            cursor: pointer;
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
-            transition: all 0.3s ease;
-            animation: pulseBtn 2s infinite alternate;
-        }
-
-        .btn-enter:hover {
-            transform: scale(1.08);
-            box-shadow: 0 0 40px rgba(212, 175, 55, 0.8);
-        }
-
-        /* --- MAIN HEADER --- */
-        header {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(12px);
-            padding: 1rem 2rem;
-            border-bottom: 2px solid #d4af37;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-            z-index: 10;
-        }
-
-        header h1 {
-            color: #d4af37;
-            font-size: 1.6rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
-        }
-
-        .bgm-control {
-            background: rgba(30, 41, 59, 0.85);
-            border: 1px solid #d4af37;
-            color: #d4af37;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s;
-        }
-
-        .bgm-control:hover {
-            background: #d4af37;
-            color: #050811;
-        }
-
-        /* --- STAGE INTERAKSI --- */
-        .robot-stage {
-            background: rgba(11, 15, 25, 0.6);
-            backdrop-filter: blur(5px);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 2rem 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            position: relative;
-            overflow: hidden;
-            z-index: 5;
-        }
-
-        .character-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            z-index: 2;
-        }
-
-        /* --- BOT 01: CINEMATIC KNIGHT AVATAR --- */
-        .knight-avatar {
-            width: 70px;
-            height: 80px;
-            position: relative;
-            animation: float 3.5s ease-in-out infinite;
-        }
-
-        .knight-helmet {
-            width: 44px;
-            height: 38px;
-            background: linear-gradient(135deg, #475569 0%, #1e293b 100%);
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            border-bottom-left-radius: 6px;
-            border-bottom-right-radius: 6px;
-            position: absolute;
-            top: 10px;
-            left: 13px;
-            border: 2px solid #d4af37;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
-            transition: transform 0.2s;
-        }
-
-        .knight-crest {
-            width: 12px;
-            height: 18px;
-            background: linear-gradient(to top, #b45309, #f59e0b);
-            position: absolute;
-            top: -6px;
-            left: 29px;
-            border-radius: 50% 50% 0 0;
-            box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
-        }
-
-        .knight-visor {
-            width: 32px;
-            height: 8px;
-            background: #090d16;
-            position: absolute;
-            top: 24px;
-            left: 19px;
-            border-radius: 4px;
-            border: 1px solid #d4af37;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 0 3px;
-            overflow: hidden;
-            z-index: 3;
-        }
-
-        .knight-eye {
-            width: 8px;
-            height: 3px;
-            background-color: #38bdf8;
-            border-radius: 2px;
-            box-shadow: 0 0 8px #38bdf8;
-            animation: pulseKnightEyes 2s infinite alternate;
-        }
-
-        .knight-gorget {
-            width: 36px;
-            height: 14px;
-            background: #334155;
-            position: absolute;
-            top: 45px;
-            left: 17px;
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-            border: 1.5px solid #d4af37;
-        }
-
-        .speaking .knight-helmet {
-            transform: scale(1.15);
-        }
-
-        /* --- BOT 02: SAMURAI CINEMATIC AVATAR --- */
-        .samurai-avatar {
-            width: 70px;
-            height: 80px;
-            position: relative;
-            animation: float 3.5s ease-in-out infinite 0.5s;
-        }
-
-        .samurai-helmet {
-            width: 45px;
-            height: 25px;
-            background: #1e1b4b;
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            position: absolute;
-            top: 10px;
-            left: 12.5px;
-            border: 2px solid #ef4444;
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
-        }
-
-        .samurai-horn-left, .samurai-horn-right {
-            width: 14px;
-            height: 4px;
-            background: #f59e0b;
-            position: absolute;
-            top: 6px;
-            box-shadow: 0 0 8px #f59e0b;
-        }
-
-        .samurai-horn-left {
-            left: 10px;
-            transform: rotate(-35deg);
-            border-top-left-radius: 5px;
-        }
-
-        .samurai-horn-right {
-            right: 10px;
-            transform: rotate(35deg);
-            border-top-right-radius: 5px;
-        }
-
-        .samurai-eyes {
-            position: absolute;
-            top: 26px;
-            left: 18px;
-            display: flex;
-            gap: 12px;
-            z-index: 3;
-        }
-
-        .samurai-eye {
-            width: 7px;
-            height: 3px;
-            background: #ef4444;
-            box-shadow: 0 0 8px #ef4444;
-        }
-
-        .samurai-mask {
-            width: 35px;
-            height: 20px;
-            background: #0f172a;
-            border: 2px solid #ef4444;
-            position: absolute;
-            top: 28px;
-            left: 17.5px;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-        }
-
-        .samurai-katana {
-            width: 4px;
-            height: 50px;
-            background: linear-gradient(to bottom, #ffffff, #94a3b8);
-            position: absolute;
-            top: 15px;
-            right: 0px;
-            transform-origin: bottom center;
-            transform: rotate(45deg);
-            box-shadow: 0 0 12px #38bdf8;
-            border-radius: 2px;
-            animation: katanaIdle 4s ease-in-out infinite;
-        }
-
-        .speaking .samurai-katana {
-            animation: katanaSlash 0.8s ease-in-out infinite alternate;
-        }
-
-        .slash-effect {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border-right: 4px solid #38bdf8;
-            border-top: 4px solid transparent;
-            border-radius: 50%;
-            top: 0px;
-            right: -20px;
-            opacity: 0;
-            transform: rotate(-45deg);
-            filter: drop-shadow(0 0 10px #38bdf8);
-        }
-
-        .speaking .slash-effect {
-            animation: slashAnim 0.8s ease-in-out infinite alternate;
-        }
-
-        .robot-label {
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: #d4af37;
-            margin-bottom: 4px;
-            display: block;
-        }
-
-        /* --- DIALOG BOX --- */
-        .robot-dialog-box {
-            background: rgba(30, 41, 59, 0.95);
-            border: 1px solid #d4af37;
-            padding: 0.8rem 1.2rem;
-            border-radius: 12px;
-            max-width: 340px;
-            font-size: 0.85rem;
-            color: #e2e8f0;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.6);
-            z-index: 2;
-        }
-
-        /* --- CONTAINER & CHAT --- */
-        .container {
-            max-width: 900px;
-            margin: 1.5rem auto;
-            padding: 0 1rem;
-            width: 100%;
-            flex: 1;
-            z-index: 5;
-        }
-
-        .chat-card {
-            background-color: rgba(11, 15, 25, 0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 520px;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 1.5rem;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            background-color: rgba(8, 12, 20, 0.5);
-        }
-
-        .message {
-            max-width: 85%;
-            padding: 0.9rem 1.2rem;
-            border-radius: 12px;
-            line-height: 1.5;
-            font-size: 0.95rem;
-            word-wrap: break-word;
-        }
-
-        .bot-message {
-            background-color: #1e293b;
-            color: #f8fafc;
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-            border-left: 3px solid #d4af37;
-        }
-
-        .user-message {
-            background: linear-gradient(135deg, #b45309 0%, #d4af37 100%);
+            background-color: #121212;
             color: #ffffff;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-            font-weight: 500;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            padding: 50px;
         }
-
-        .chat-input-area {
-            padding: 1rem;
-            background-color: rgba(5, 8, 17, 0.9);
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            border-top: 1px solid #1f2937;
-        }
-
-        textarea {
-            flex: 1;
-            padding: 0.8rem 1rem;
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #1e1e1e;
+            padding: 30px;
             border-radius: 8px;
-            border: 1px solid #374151;
-            background-color: #0d1322;
-            color: #fff;
-            outline: none;
-            resize: none;
-            height: 48px;
-            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
-
-        textarea:focus {
-            border-color: #d4af37;
-            box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+        h1 {
+            color: #f39c12;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
-
         button {
-            padding: 0.8rem 1.5rem;
-            background: linear-gradient(135deg, #d4af37 0%, #b45309 100%);
-            color: white;
+            background-color: #f39c12;
+            color: #121212;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
+            padding: 12px 25px;
+            font-size: 16px;
             font-weight: bold;
-            height: 48px;
-            letter-spacing: 1px;
-            transition: all 0.2s ease-in-out;
-        }
-
-        button:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-
-        .quick-questions {
-            display: flex;
-            gap: 8px;
-            padding: 0.6rem 1rem;
-            background-color: rgba(11, 15, 25, 0.8);
-            overflow-x: auto;
-            border-top: 1px solid #1f2937;
-        }
-
-        .chip {
-            background-color: #1e293b;
-            color: #cbd5e1;
-            padding: 6px 14px;
-            border-radius: 16px;
-            font-size: 0.8rem;
             cursor: pointer;
-            white-space: nowrap;
-            border: 1px solid #334155;
-            transition: all 0.2s;
+            border-radius: 4px;
+            margin-top: 20px;
+            transition: 0.2s;
         }
-
-        .chip:hover {
-            border-color: #d4af37;
-            color: #d4af37;
-            background-color: #0f172a;
+        button:hover {
+            background-color: #e67e22;
         }
-
-        /* --- KEYFRAMES --- */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-            100% { transform: translateY(0px); }
-        }
-
-        @keyframes pulseKnightEyes {
-            0% { opacity: 0.5; box-shadow: 0 0 4px #38bdf8; }
-            100% { opacity: 1; box-shadow: 0 0 12px #38bdf8; }
-        }
-
-        @keyframes pulseBtn {
-            0% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
-            100% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.8); }
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes dialogFade {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes katanaIdle {
-            0%, 100% { transform: rotate(45deg); }
-            50% { transform: rotate(40deg); }
-        }
-
-        @keyframes katanaSlash {
-            0% { transform: rotate(20deg) scale(1); }
-            100% { transform: rotate(-60deg) scale(1.15); }
-        }
-
-        @keyframes slashAnim {
-            0% { opacity: 0; transform: rotate(-45deg) scale(0.5); }
-            50% { opacity: 1; transform: rotate(15deg) scale(1.2); }
-            100% { opacity: 0; transform: rotate(45deg) scale(1.4); }
+        #status {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #888;
         }
     </style>
 </head>
 <body>
 
-    <!-- BACKGROUND WALLPAPER ANIME SAMURAI ELEGANT -->
-    <div class="anime-bg">
-        <div class="samurai-silhouette"></div>
-    </div>
-
-    <!-- OVERLAY LAYAR CINEMATIC -->
-    <div id="cinematicIntro">
-        <div class="intro-title">DYREN STUDIO</div>
-        <div class="intro-sub">WELCOME TO SERVER ASSISTANT SYSTEM</div>
-        <button class="btn-enter" onclick="enterSystem()">ENTER SYSTEM</button>
-    </div>
-
-    <header>
-        <h1>DYREN STUDIO</h1>
-        <button class="bgm-control" id="bgmBtn" onclick="toggleBGM()">🍃 BGM: ON (Jepang Santai)</button>
-    </header>
-
-    <!-- STAGE INTERAKSI (CYBER KNIGHT BOT 01 vs CYBER SAMURAI BOT 02) -->
-    <div class="robot-stage">
-        <!-- Cinematic Knight (Bot 01) -->
-        <div class="character-container" id="bot01Container">
-            <div class="knight-avatar">
-                <div class="knight-crest"></div>
-                <div class="knight-helmet"></div>
-                <div class="knight-visor">
-                    <div class="knight-eye"></div>
-                    <div class="knight-eye"></div>
-                </div>
-                <div class="knight-gorget"></div>
-            </div>
-            <span class="robot-label">CYBER KNIGHT</span>
-        </div>
-
-        <!-- Dynamic Dialog Box -->
-        <div class="robot-dialog-box" id="robotTalk">
-            "Sistem siap digunakan dengan nuansa tenang."
-        </div>
-
-        <!-- Cyber Samurai (Bot 02) -->
-        <div class="character-container" id="bot02Container">
-            <div class="samurai-avatar">
-                <div class="samurai-horn-left"></div>
-                <div class="samurai-horn-right"></div>
-                <div class="samurai-helmet"></div>
-                <div class="samurai-eyes">
-                    <div class="samurai-eye"></div>
-                    <div class="samurai-eye"></div>
-                </div>
-                <div class="samurai-mask"></div>
-                <div class="samurai-katana"></div>
-                <div class="slash-effect"></div>
-            </div>
-            <span class="robot-label" style="color: #ef4444;">CYBER SAMURAI</span>
-        </div>
-    </div>
-
     <div class="container">
-        <div class="chat-card">
-            <div class="chat-messages" id="chatBox">
-                <div class="message bot-message">
-                    Selamat datang! Saya <b>DYREN STUDIO AI Assistant</b>. Silakan tanyakan aturan server seputar Rules Ramboing, RDM, VDM, NLR, MetaGaming, atau informasi server lainnya.
-                </div>
-            </div>
-
-            <div class="quick-questions">
-                <div class="chip" onclick="askQuick('Rules Ramboing')">📜 Rules Ramboing</div>
-                <div class="chip" onclick="askQuick('Batas Membawa Uang')">💵 Batas Uang</div>
-                <div class="chip" onclick="askQuick('Apa itu RDM?')">Apa itu RDM?</div>
-                <div class="chip" onclick="askQuick('Apa itu VDM?')">Apa itu VDM?</div>
-                <div class="chip" onclick="askQuick('Aturan New Life Rule (NLR)')">Aturan NLR</div>
-            </div>
-
-            <div class="chat-input-area">
-                <textarea id="userInput" placeholder="Tanyakan seputar rules server... (Tekan Enter untuk kirim)" onkeydown="handleKeyDown(event)"></textarea>
-                <button onclick="sendMessage()">Kirim</button>
-            </div>
-        </div>
+        <h1>San Andreas Rules Server</h1>
+        <p>Tekan tombol di bawah untuk memutar melodi synth gangster ala GTA SAMP.</p>
+        <button id="playBtn" onclick="toggleMusic()">Putar Musik</button>
+        <div id="status">Status: Berhenti</div>
     </div>
 
     <script>
-        let isAudioAllowed = false;
-        let talkIndex = 0;
         let audioCtx = null;
-        let bgmInterval = null;
-        let isBgmPlaying = false;
-        let indoMaleVoice = null;
+        let isPlaying = false;
+        let timerId = null;
 
-        // --- EFEK KELOPAK SAKURA BERJATUHAN ---
-        function createSakuraPetals() {
-            const bg = document.querySelector('.anime-bg');
-            const petalCount = 18;
-            for (let i = 0; i < petalCount; i++) {
-                const petal = document.createElement('div');
-                petal.className = 'sakura-petal';
-                petal.style.left = Math.random() * 100 + 'vw';
-                petal.style.top = -10 + 'vh';
-                const size = Math.random() * 8 + 6;
-                petal.style.width = size + 'px';
-                petal.style.height = size * 1.4 + 'px';
-                petal.style.animationDuration = (Math.random() * 6 + 6) + 's';
-                petal.style.animationDelay = (Math.random() * 5) + 's';
-                bg.appendChild(petal);
-            }
-        }
-        createSakuraPetals();
+        // Nada dasar ala G-Funk / Hip-hop klasik (Frequencies dalam Hz)
+        const bassNotes = [110, 110, 123.47, 130.81, 110, 98.00, 87.31, 98.00];
+        const synthNotes = [440, 493.88, 523.25, 587.33, 523.25, 493.88, 440, 392.00];
+        let step = 0;
 
-        // --- FILTER SUARA BAHASA INDONESIA KHUSUS PRIA ---
-        function loadVoices() {
-            if (!('speechSynthesis' in window)) return;
-            const voices = window.speechSynthesis.getVoices();
-            
-            indoMaleVoice = voices.find(v => 
-                (v.lang.includes('id') || v.lang.includes('ID')) && 
-                (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('pria') || v.name.toLowerCase().includes('ardhi') || v.name.toLowerCase().includes('andika')) &&
-                !v.name.toLowerCase().includes('female') && !v.name.toLowerCase().includes('gadis') && !v.name.toLowerCase().includes('zira')
-            );
-
-            if (!indoMaleVoice) {
-                indoMaleVoice = voices.find(v => v.lang.includes('id') || v.lang.includes('ID'));
-            }
-        }
-
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.onvoiceschanged = loadVoices;
-            loadVoices();
-        }
-
-        // --- BGM TEMA JEPANG SANTAI (SERULING & GITAR AKUSTIK) ---
-        function startJapaneseRelaxBGM() {
+        function startMusic() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
-            isBgmPlaying = true;
-            
-            const japaneseScale = [261.63, 293.66, 311.13, 392.00, 415.30, 523.25, 587.33, 622.25];
-            const melodyPattern = [0, 2, 3, 4, 3, 2, 1, 0, 3, 5, 4, 2, 0];
 
-            function playFluteNote(freq, duration) {
-                if (!isBgmPlaying) return;
-                try {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            isPlaying = true;
+            document.getElementById('playBtn').innerText = 'Matikan Musik';
+            document.getElementById('status').innerText = 'Status: Memutar Musik Gangsta...';
 
-                    const lfo = audioCtx.createOscillator();
-                    const lfoGain = audioCtx.createGain();
-                    lfo.frequency.value = 5;
-                    lfoGain.gain.value = 4;
-                    lfo.connect(osc.frequency);
-                    lfo.start();
-                    lfo.stop(audioCtx.currentTime + duration);
-
-                    gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
-                    gain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.3);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + duration);
-                } catch(e) {}
-            }
-
-            function playGuitarArpeggio(freq) {
-                if (!isBgmPlaying) return;
-                try {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-                    gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.9);
-
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.9);
-                } catch(e) {}
-            }
-
-            let step = 0;
-            bgmInterval = setInterval(() => {
-                if (!isBgmPlaying) return;
-
-                const chordFrequencies = [130.81, 196.00, 246.94, 329.63];
-                playGuitarArpeggio(chordFrequencies[step % chordFrequencies.length]);
-
-                if (step % 2 === 0) {
-                    const noteIdx = melodyPattern[(step / 2) % melodyPattern.length];
-                    playFluteNote(japaneseScale[noteIdx], 1.2);
-                }
-
+            // Tempo ketukan (BPM ala santai)
+            timerId = setInterval(() => {
+                playGangstaBeat(audioCtx, bassNotes[step % bassNotes.length], synthNotes[step % synthNotes.length]);
                 step++;
-            }, 650);
-        }
-
-        function toggleBGM() {
-            const btn = document.getElementById('bgmBtn');
-            if (isBgmPlaying) {
-                isBgmPlaying = false;
-                clearInterval(bgmInterval);
-                btn.innerText = "🎵 BGM: OFF";
-            } else {
-                startJapaneseRelaxBGM();
-                btn.innerText = "🍃 BGM: ON (Jepang Santai)";
-            }
-        }
-
-        // --- DIALOG PERCAKAPAN ---
-        const robotConversations = [
-            { bot: 1, text: "Ksatria, bagaimana aturan ramboing di kota atau server ini?" },
-            { bot: 2, text: "Hasil kerja tanpa tas maksimal 200, kalau pakai tas bisa membawa sampai 250." },
-            { bot: 1, text: "Kalau membawa uang di kantong berapa batas maksimalnya?" },
-            { bot: 2, text: "Tanpa koper maksimal 100 ribu, kalau pakai koper bisa 1 juta rupiah!" },
-            { bot: 1, text: "Sanksinya kalau melanggar apa, kawan?" },
-            { bot: 2, text: "Bisa kena Jail 60 menit dan 2 Warning tanpa toleransi!" },
-            { bot: 1, text: "Siap, wajib mematuhi rules demi keadilan roleplay!" }
-        ];
-
-        function triggerRobotDialog(index) {
-            if (!isAudioAllowed) return;
-
-            const currentTalk = robotConversations[index];
-            const talkBox = document.getElementById('robotTalk');
-            const botName = currentTalk.bot === 1 ? "CYBER KNIGHT" : "CYBER SAMURAI";
-            
-            talkBox.style.animation = 'none';
-            talkBox.offsetHeight;
-            talkBox.style.animation = 'dialogFade 0.5s ease-in-out';
-            talkBox.innerHTML = `<b>${botName}:</b> "${currentTalk.text}"`;
-
-            if (!('speechSynthesis' in window)) return;
-
-            window.speechSynthesis.cancel();
-
-            const utterance = new SpeechSynthesisUtterance(currentTalk.text);
-            utterance.lang = 'id-ID';
-            utterance.rate = 0.92;
-
-            if (indoMaleVoice) {
-                utterance.voice = indoMaleVoice;
-            }
-
-            if (currentTalk.bot === 1) {
-                utterance.pitch = 0.60;
-            } else {
-                utterance.pitch = 0.75;
-            }
-
-            const talkBot = currentTalk.bot === 1 ? document.getElementById('bot01Container') : document.getElementById('bot02Container');
-            talkBot.classList.add('speaking');
-
-            utterance.onend = () => {
-                talkBot.classList.remove('speaking');
-                setTimeout(() => {
-                    talkIndex = (talkIndex + 1) % robotConversations.length;
-                    triggerRobotDialog(talkIndex);
-                }, 1800);
-            };
-
-            utterance.onerror = () => {
-                talkBot.classList.remove('speaking');
-                setTimeout(() => {
-                    talkIndex = (talkIndex + 1) % robotConversations.length;
-                    triggerRobotDialog(talkIndex);
-                }, 2000);
-            };
-
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function enterSystem() {
-            isAudioAllowed = true;
-            loadVoices();
-            const intro = document.getElementById('cinematicIntro');
-            intro.style.opacity = '0';
-            setTimeout(() => {
-                intro.style.visibility = 'hidden';
-                startJapaneseRelaxBGM();
-                triggerRobotDialog(0);
-            }, 1000);
-        }
-
-        const ramboingRulesText = `Demi menjaga keseimbangan, keadilan, dan kualitas Roleplay, berikut adalah pembaruan <b>Rules Ramboing</b> yang WAJIB dipatuhi oleh seluruh pemain. ⚖️✨<br><br>
-📦 <b>Batas Maksimal Hasil Kerja:</b><br>
-📌 Tanpa Tas: Max 200<br>
-🎒 Menggunakan Tas: Max 250<br>
-<i>Berlaku untuk seluruh hasil pekerjaan seperti 🛢️ Minyak, 🪵 Kayu, ⛏️ Bahan Tambang (🥇 Emas, 🥈 Perak, ⚙️ Besi), 🧵 Hasil Jahit, serta seluruh hasil kerja lainnya.</i><br><br>
-🛠️ <b>Batas Maksimal Peralatan:</b><br>
-📱 HP : Max 5<br>
-🛹 Skate : Max 5<br>
-🎨 Pilox : Max 5<br>
-🧰 Toolkit : Max 5<br>
-⛽ Jerigen : Max 5<br>
-🍱 Paket Makanan : Max 10<br>
-🍔 Makanan : Max 20<br>
-🥤 Minuman : Max 20<br>
-🩹 Bandage : Max 10<br><br>
-💵 <b>Batas Maksimal Membawa Uang Hijau:</b><br>
-💸 Tanpa Koper: Max $100.000 di kantong.<br>
-🧳 Menggunakan Aksesoris Koper: Max $1.000.000.<br><br>
-⚠️ <b>Sanksi Pelanggaran:</b><br>
-🚔 Pemain yang terbukti melanggar Rules Ramboing atau membawa barang maupun uang melebihi batas yang telah ditentukan akan dikenakan sanksi berupa:<br>
-🔒 Jail 60 Menit<br>
-⚠️ +2 Warning<br><br>
-❗ <i>Tidak ada toleransi. Pastikan selalu memeriksa jumlah barang dan uang yang dibawa sebelum melakukan aktivitas Roleplay agar terhindar dari sanksi.</i><br><br>
-🙏 Terima kasih atas perhatian dan kerja samanya. Mari bersama-sama menjaga Nexotis Roleplay agar tetap realistis, adil, dan nyaman untuk seluruh pemain.`;
-
-        const serverRules = {
-            "ramboing": ramboingRulesText,
-            "rambo": ramboingRulesText,
-            "tas": ramboingRulesText,
-            "peralatan": ramboingRulesText,
-            "uang": "<b>Batas Membawa Uang Hijau:</b><br>💸 Tanpa Koper: Max $100.000 di kantong.<br>🧳 Menggunakan Aksesoris Koper: Max $1.000.000.",
-            "rdm": "<b>RDM (Random Deathmatch):</b> Membunuh atau menyerang pemain lain tanpa alasan Roleplay (RP) yang jelas dan valid.",
-            "vdm": "<b>VDM (Vehicle Deathmatch):</b> Menggunakan kendaraan sebagai senjata untuk menabrak atau membunuh pemain lain tanpa alasan RP.",
-            "nlr": "<b>NLR (New Life Rule):</b> Jika karakter Anda pingsan/mati dan di-respawn di Rumah Sakit, Anda lupa akan kejadian sebelum mati dan tidak boleh kembali ke lokasi kejadian dalam kurun waktu tertentu.",
-            "metagaming": "<b>MetaGaming (MG):</b> Menggunakan informasi dari luar game (OOC/Discord/Livestream) untuk kepentingan dalam game (IC).",
-            "powergaming": "<b>PowerGaming (PG):</b> Melakukan hal-hal yang tidak manusiawi atau tidak masuk akal secara realitas di dalam server RP.",
-            "failrp": "<b>Fail RP:</b> Gagal melakukan roleplay sesuai standar atau keluar dari peran karakter secara sengaja.",
-            "ooc": "<b>OOC (Out of Character):</b> Pembicaraan atau tindakan di luar karakter RP.",
-            "ic": "<b>IC (In Character):</b> Segala hal yang berkaitan langsung melalui karakter dalam game."
-        };
-
-        function sendMessage() {
-            const input = document.getElementById('userInput');
-            const message = input.value.trim();
-
-            if (message === '') return;
-
-            appendMessage(message, 'user-message');
-            input.value = '';
-
-            setTimeout(() => {
-                const botResponse = getBotResponse(message.toLowerCase());
-                appendMessage(botResponse, 'bot-message');
             }, 300);
         }
 
-        function askQuick(text) {
-            document.getElementById('userInput').value = text;
-            sendMessage();
+        function stopMusic() {
+            isPlaying = false;
+            clearInterval(timerId);
+            document.getElementById('playBtn').innerText = 'Putar Musik';
+            document.getElementById('status').innerText = 'Status: Berhenti';
         }
 
-        function handleKeyDown(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
+        function toggleMusic() {
+            if (isPlaying) {
+                stopMusic();
+            } else {
+                startMusic();
             }
         }
 
-        function appendMessage(text, className) {
-            const chatBox = document.getElementById('chatBox');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${className}`;
-            messageDiv.innerHTML = text;
-            chatBox.appendChild(messageDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
+        function playGangstaBeat(ctx, bassFreq, synthFreq) {
+            let now = ctx.currentTime;
 
-        function getBotResponse(query) {
-            for (let key in serverRules) {
-                if (query.includes(key)) {
-                    return serverRules[key];
-                }
+            // 1. Suara Bass Tebal (Sub-Bass)
+            let oscBass = ctx.createOscillator();
+            let gainBass = ctx.createGain();
+            
+            oscBass.type = 'sawtooth';
+            oscBass.frequency.setValueAtTime(bassFreq / 2, now);
+
+            // Filter agar suara bass lebih "mendem" khas pantai barat
+            let filter = ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(300, now);
+
+            gainBass.gain.setValueAtTime(0.5, now);
+            gainBass.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+
+            oscBass.connect(filter);
+            filter.connect(gainBass);
+            gainBass.connect(ctx.destination);
+
+            oscBass.start(now);
+            oscBass.stop(now + 0.25);
+
+            // 2. Suara Lead Synth Portamento Tinggi (High Pitch G-Funk Whistle)
+            if (step % 2 === 0) {
+                let oscLead = ctx.createOscillator();
+                let gainLead = ctx.createGain();
+
+                oscLead.type = 'sine';
+                oscLead.frequency.setValueAtTime(synthFreq, now);
+                oscLead.frequency.exponentialRampToValueAtTime(synthFreq * 1.5, now + 0.2);
+
+                gainLead.gain.setValueAtTime(0.15, now);
+                gainLead.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+                oscLead.connect(gainLead);
+                gainLead.connect(ctx.destination);
+
+                oscLead.start(now);
+                oscLead.stop(now + 0.25);
             }
-            return "Maaf, saya tidak menemukan aturan spesifik terkait hal tersebut. Silakan baca rules lengkap di Discord resmi atau tanyakan ke Admin/Staff DYREN STUDIO.";
         }
     </script>
 </body>
