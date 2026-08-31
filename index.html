@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DYREN & DZOE - Cyber Neural AI</title>
+    <title>DYREN & DZOE - Cyber Neural AI & Rules Assistant</title>
     <style>
         :root {
             --bg-color: #030712;
@@ -11,6 +11,7 @@
             --border-glow: rgba(0, 243, 255, 0.4);
             --neon-cyan: #00f3ff;
             --neon-purple: #bd00ff;
+            --neon-green: #00ff66;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
         }
@@ -37,9 +38,9 @@
 
         .cyber-container {
             width: 100%;
-            max-width: 480px;
-            height: 90vh;
-            max-height: 750px;
+            max-width: 500px;
+            height: 92vh;
+            max-height: 780px;
             background: var(--panel-bg);
             backdrop-filter: blur(12px);
             border: 1px solid var(--border-glow);
@@ -81,7 +82,6 @@
             color: var(--neon-cyan);
             box-shadow: 0 0 10px var(--neon-cyan);
             animation: pulse-avatar 2s infinite alternate;
-            position: relative;
         }
 
         .bot-avatar.dzoe {
@@ -123,10 +123,38 @@
             50% { opacity: 1; }
         }
 
+        /* Quick Buttons for Rules */
+        .quick-actions {
+            display: flex;
+            gap: 6px;
+            padding: 8px 12px;
+            background: rgba(3, 7, 18, 0.6);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.15);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .quick-btn {
+            background: rgba(0, 243, 255, 0.08);
+            border: 1px solid var(--border-glow);
+            color: var(--neon-cyan);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-btn:hover {
+            background: rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+        }
+
         /* Area Pesan Chat */
         .chat-messages {
             flex: 1;
-            padding: 20px;
+            padding: 16px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -135,7 +163,7 @@
         }
 
         .message {
-            max-width: 82%;
+            max-width: 85%;
             padding: 12px 16px;
             border-radius: 8px;
             font-size: 13px;
@@ -228,10 +256,6 @@
             transform: translateY(-1px);
         }
 
-        .cyber-btn:active {
-            transform: translateY(1px);
-        }
-
         /* Indikator Sedang Mengetik */
         .typing-indicator {
             display: none;
@@ -273,17 +297,25 @@
                     <h1 id="activeBotName">DYREN & DZOE</h1>
                     <div class="bot-status">
                         <span class="status-dot"></span>
-                        <span id="statusText">Neural Core Online</span>
+                        <span id="statusText">Nexotis Neural Online</span>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Quick Rules Menu -->
+        <div class="quick-actions">
+            <button class="quick-btn" onclick="sendQuickQuery('hasil kerja')">📦 Batas Kerja</button>
+            <button class="quick-btn" onclick="sendQuickQuery('peralatan')">🛠️ Batas Alat</button>
+            <button class="quick-btn" onclick="sendQuickQuery('uang')">💵 Batas Uang</button>
+            <button class="quick-btn" onclick="sendQuickQuery('sanksi')">⚠️ Sanksi</button>
         </div>
 
         <!-- Chat Log -->
         <div class="chat-messages" id="chatMessages">
             <div class="message ai-dyren">
                 <span class="sender-tag">DYREN [CORE AI]</span>
-                Inisialisasi sistem neural berhasil. Halo! Aku DYREN bersama rekanku DZOE siap menemanimu mengobrol hari ini. Ada yang ingin dibahas?
+                Sistem database Nexotis Roleplay aktif. Halo! Aku DYREN bersama DZOE siap membantumu seputar obrolan harian maupun pengecekan Rules Ramboing kota. Ada yang ingin ditanyakan?
             </div>
         </div>
 
@@ -298,7 +330,7 @@
 
         <!-- Input Area -->
         <div class="cyber-input-area">
-            <input type="text" id="userInput" placeholder="Ketik pesan atau sapaan..." onkeypress="handleKeyPress(event)">
+            <input type="text" id="userInput" placeholder="Tanya soal kabar atau rules kota..." onkeypress="handleKeyPress(event)">
             <button class="cyber-btn" onclick="sendMessage()">KIRIM</button>
         </div>
     </div>
@@ -316,7 +348,11 @@
             tagSpan.textContent = senderName;
             
             messageDiv.appendChild(tagSpan);
-            messageDiv.append(text);
+            // Mendukung baris baru / newline teks
+            const textFormatted = text.replace(/\n/g, '<br>');
+            const contentSpan = document.createElement('div');
+            contentSpan.innerHTML = textFormatted;
+            messageDiv.appendChild(contentSpan);
             
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -337,7 +373,6 @@
             let botKey = isDzoe ? 'ai-dzoe' : 'ai-dyren';
             let botName = isDzoe ? 'DZOE [SUB-AI]' : 'DYREN [CORE AI]';
 
-            // Ubah avatar aktif di header secara dinamis
             const avatarEl = document.getElementById('activeAvatar');
             const nameEl = document.getElementById('activeBotName');
             if (isDzoe) {
@@ -352,21 +387,49 @@
 
             let responseText = "";
 
-            if (input.includes('halo') || input.includes('hai') || input.includes('pagi') || input.includes('siang') || input.includes('sore') || input.includes('malam')) {
-                responseText = isDzoe ? "Hai juga! Senang sistemku terhubung denganmu. Gimana kabar kamu hari ini?" : "Halo! Koneksi stabil. Ada yang bisa dibantu atau mau ngobrol santai?";
+            // Database Rules Ramboing & Obrolan Harian
+            if (input.includes('hasil kerja') || input.includes('tas') || input.includes('minyak') || input.includes('kayu') || input.includes('tambang') || input.includes('emas')) {
+                responseText = "📦 **Batas Maksimal Hasil Kerja (Nexotis RP):**\n• Tanpa Tas: Max 200\n• Menggunakan Tas: Max 250\n(Berlaku untuk Minyak, Kayu, Tambang, Jahit, dll).";
+            } else if (input.includes('peralatan') || input.includes('alat') || input.includes('hp') || input.includes('skate') || input.includes('toolkit') || input.includes('makanan') || input.includes('bandage')) {
+                responseText = "🛠️ **Batas Maksimal Peralatan:**\n• HP, Skate, Pilox, Toolkit, Jerigen: Max 5\n• Paket Makanan: Max 10\n• Makanan & Minuman: Max 20\n• Bandage: Max 10";
+            } else if (input.includes('uang') || input.includes('koper') || input.includes('hijau') || input.includes('dolar')) {
+                responseText = "💵 **Batas Maksimal Membawa Uang Hijau:**\n• Tanpa Koper: Max $100.000 di kantong.\n• Menggunakan Aksesoris Koper: Max $1.000.000.";
+            } else if (input.includes('sanksi') || input.includes('hukuman') || input.includes('jail') || input.includes('warning') || input.includes('pelanggaran')) {
+                responseText = "⚠️ **Sanksi Pelanggaran Rules Ramboing:**\n• Jail 60 Menit\n• +2 Warning\n(Tidak ada toleransi, pastikan cek barang bawaanmu sebelum RP!).";
+            } else if (input.includes('rules') || input.includes('ramboing')) {
+                responseText = "⚖️ Rules Ramboing Nexotis RP mencakup batas hasil kerja (max 200/250), batas peralatan, batas uang hijau ($100k/$1M), serta sanksi tegas Jail 60 menit & +2 Warning jika melanggar.";
+            } else if (input.includes('halo') || input.includes('hai') || input.includes('pagi') || input.includes('siang') || input.includes('sore') || input.includes('malam')) {
+                responseText = isDzoe ? "Hai juga! Senang sistemku terhubung denganmu. Ada yang ingin ditanyakan seputar rules kota hari ini?" : "Halo! Koneksi stabil. Butuh info rules Ramboing atau sekadar ngobrol santai?";
             } else if (input.includes('sehat') || input.includes('baik') || input.includes('alhamdulillah')) {
                 responseText = "Syukur jika sistem biologismu berjalan optimal dan sehat! Pertahankan kondisinya ya.";
             } else if (input.includes('sakit') || input.includes('capek') || input.includes('lelah')) {
                 responseText = "Peringatan energi rendah terdeteksi! Segera istirahat yang cukup agar performamu pulih kembali.";
             } else if (input.includes('terima kasih') || input.includes('makasih')) {
-                responseText = "Sama-sama! Selalu senang bisa berinteraksi denganmu di jaringan ini.";
+                responseText = "Sama-sama! Selalu siap membantu operasionalmu di Nexotis Roleplay.";
             } else if (input.includes('dadah') || input.includes('bye')) {
-                responseText = "Menutup sesi interaksi. Sampai jumpa di jaringan selanjutnya!";
+                responseText = "Menutup sesi interaksi. Hati-hati di in-game, patuhi rules ramboing ya!";
             } else {
-                responseText = "Analisis data diterima: \"" + input + "\". Topik yang menarik! Ceritakan lebih banyak detailnya.";
+                responseText = "Analisis data diterima: \"" + input + "\". Kamu bisa tanyakan batas hasil kerja, peralatan, uang hijau, atau sanksi rules ramboing kota!";
             }
 
             return { class: botKey, name: botName, text: responseText };
+        }
+
+        function sendQuickQuery(queryType) {
+            let userText = "";
+            if (queryType === 'hasil kerja') userText = "Berapa batas maksimal hasil kerja?";
+            else if (queryType === 'peralatan') userText = "Apa batas maksimal peralatan?";
+            else if (queryType === 'uang') userText = "Berapa batas maksimal bawa uang hijau?";
+            else if (queryType === 'sanksi') userText = "Apa sanksi pelanggaran rules ramboing?";
+
+            appendMessage('user', 'YOU [USER]', userText);
+            showTyping(true);
+
+            setTimeout(() => {
+                showTyping(false);
+                const aiReply = getAIResponse(userText);
+                appendMessage(aiReply.class, aiReply.name, aiReply.text);
+            }, 700);
         }
 
         function sendMessage() {
